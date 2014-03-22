@@ -1,4 +1,4 @@
-package com.github.hvd617.tsa.db;
+package com.github.hiendo.tsa.db;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

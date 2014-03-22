@@ -1,4 +1,4 @@
-package com.github.hvd617.tsa.db;
+package com.github.hiendo.tsa.db;
 
 
 import com.datastax.driver.core.ResultSet;

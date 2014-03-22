@@ -1,14 +1,12 @@
-package com.github.hvd617.tsa.db;
+package com.github.hiendo.tsa.db;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
