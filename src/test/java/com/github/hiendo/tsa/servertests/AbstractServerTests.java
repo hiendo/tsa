@@ -1,10 +1,14 @@
 package com.github.hiendo.tsa.servertests;
 
+import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.config.AppConfiguration;
 import com.github.hiendo.tsa.config.AppServerProperties;
 import com.github.hiendo.tsa.servertests.operations.RestTestOperations;
 import com.github.hiendo.tsa.servertests.operations.StaticFileOperations;
-import com.github.hiendo.tsa.servertests.operations.TimeSeriesOperations;
+import com.github.hiendo.tsa.servertests.operations.TimeSeriesTopicOperations;
+import org.cassandraunit.CQLDataLoader;
+import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
+import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.grizzly.connector.GrizzlyConnectorProvider;
@@ -32,10 +36,17 @@ public class AbstractServerTests {
 
     protected static StaticFileOperations staticFileOperations;
     protected static RestTestOperations restTestOperations;
-    protected static TimeSeriesOperations timeSeriesOperations;
+    protected static TimeSeriesTopicOperations timeSeriesTopicOperations;
+
+    protected static Session cassandraSession;
 
     @BeforeSuite
 	public void startupEmbeddedServer() throws Exception {
+        EmbeddedCassandraServerHelper.startEmbeddedCassandra();
+        CQLDataLoader dataLoader = new CQLDataLoader("localhost", 9142);
+        dataLoader.load(new ClassPathCQLDataSet("schema.cql"));
+
+
         loadProperties();
 
         String serverBaseUrl = "http://localhost:" + appServerProperties.getPort();
@@ -45,6 +56,7 @@ public class AbstractServerTests {
         setupOperationClasses(webTarget);
 
         context = startupFuture.get(30, TimeUnit.SECONDS);
+        cassandraSession = context.getBean(Session.class);
     }
 
     @AfterSuite
@@ -65,7 +77,7 @@ public class AbstractServerTests {
     private void setupOperationClasses(WebTarget webTarget) {
         staticFileOperations = new StaticFileOperations(webTarget);
         restTestOperations = new RestTestOperations(webTarget);
-        timeSeriesOperations = new TimeSeriesOperations(webTarget);
+        timeSeriesTopicOperations = new TimeSeriesTopicOperations(webTarget);
     }
 
     private Future<ConfigurableApplicationContext> startupServer() throws Exception {

@@ -1,13 +1,15 @@
 package com.github.hiendo.tsa.db;
 
+import com.github.hiendo.tsa.web.entities.DataPoints;
+
 /**
  *
  */
-public class DataPoints {
+public class DataPointsEntity {
     private long[] times;
     private double[] values;
 
-    public DataPoints(long[] times, double[] values) {
+    public DataPointsEntity(long[] times, double[] values) {
         assert times.length == values.length;
         this.times = times;
         this.values = values;
@@ -23,5 +25,9 @@ public class DataPoints {
 
     public long getTimeAt(int index) {
         return times[index];
+    }
+
+    public DataPoints toApiEntity() {
+        return new DataPoints(times, values);
     }
 }

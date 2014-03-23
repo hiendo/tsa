@@ -1,4 +1,4 @@
-package com.github.hiendo.tsa.entities;
+package com.github.hiendo.tsa.web.entities;
 
 public class TestEntity {
 

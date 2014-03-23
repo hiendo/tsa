@@ -1,5 +1,6 @@
 package com.github.hiendo.tsa.db;
 
+import com.github.hiendo.tsa.servertests.AbstractServerTests;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -14,24 +15,23 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.number.IsCloseTo.closeTo;
 
 @Test
-public class TimeSeriesRepositoryTests extends AbstractDbBaseTests {
+public class TimeSeriesRepositoryTests extends AbstractServerTests {
 
     private TimeSeriesRepository timeSeriesRepository;
 
     @BeforeClass
     public void beforeClass() {
-        timeSeriesRepository = new TimeSeriesRepository(session);
+        timeSeriesRepository = new TimeSeriesRepository(cassandraSession);
     }
 
     @Test
     public void canInsertTimeSeriesData() throws Exception {
-        TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository(session);
         long now = new Date().getTime();
 
         timeSeriesRepository.saveTime("topic", 2.54);
         timeSeriesRepository.saveTime("topic", 2.55);
 
-        DataPoints dataPoints = timeSeriesRepository.getAllDataPointsForTopic("topic");
+        DataPointsEntity dataPoints = timeSeriesRepository.getAllDataPointsForTopic("topic");
         assertThat("Data points", dataPoints, notNullValue());
         assertThat("Data points size", dataPoints.size(), is(2));
         assertThat("Data points time", dataPoints.getTimeAt(0), allOf(greaterThan(now - 100), lessThan(now + 100)));
@@ -42,7 +42,7 @@ public class TimeSeriesRepositoryTests extends AbstractDbBaseTests {
 
     @Test
     public void canGetTimeSeriesForTopicWithNoData() throws Exception {
-        DataPoints dataPoints = timeSeriesRepository.getAllDataPointsForTopic("non.existing.topic");
+        DataPointsEntity dataPoints = timeSeriesRepository.getAllDataPointsForTopic("non.existing.topic");
 
         assertThat("Data points", dataPoints, notNullValue());
         assertThat("Data points size", dataPoints.size(), is(0));

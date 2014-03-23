@@ -1,4 +1,4 @@
-package com.github.hiendo.tsa.entities;
+package com.github.hiendo.tsa.web.entities;
 
 /**
  *
@@ -6,6 +6,9 @@ package com.github.hiendo.tsa.entities;
 public class DataPoint {
 
     private double value;
+
+    // Json serialization
+    private DataPoint(){}
 
     public DataPoint(double value) {
         this.value = value;

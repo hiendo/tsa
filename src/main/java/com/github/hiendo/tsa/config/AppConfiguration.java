@@ -1,11 +1,15 @@
 package com.github.hiendo.tsa.config;
 
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
 import org.apache.catalina.Context;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.JarScanner;
 import org.apache.tomcat.JarScannerCallback;
+import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -102,7 +106,17 @@ public class AppConfiguration implements WebSocketConfigurer {
         ResourceConfig resourceConfig = new ResourceConfig();
         resourceConfig.packages("com.github.hiendo");
         resourceConfig.register(JacksonFeature.class);
+        resourceConfig.property(ServerProperties.TRACING, "ALL");
+        //resourceConfig.register(LoggingFilter.class);
         ServletContainer servletContainer = new org.glassfish.jersey.servlet.ServletContainer(resourceConfig);
         return new ServletRegistrationBean(servletContainer,"/rest/*");
+    }
+
+    @Bean
+    public Session cassandraSession(){
+        final Cluster cluster = new Cluster.Builder().addContactPoints("localhost").withPort(9142).build();
+        return cluster.connect("tsa");
+
+        // @todo cleanup client
     }
 }

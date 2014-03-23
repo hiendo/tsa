@@ -4,15 +4,19 @@ package com.github.hiendo.tsa.db;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 // @todo: look here to implement shard:
 // http://planetcassandra.org/blog/post/getting-started-with-time-series-data-modeling/
+@Component
 public class TimeSeriesRepository {
 
     private Session session;
 
+    @Autowired
     public TimeSeriesRepository(Session session) {
         this.session = session;
     }
@@ -23,7 +27,7 @@ public class TimeSeriesRepository {
         session.execute(command);
     }
 
-    public DataPoints getAllDataPointsForTopic(String topic) {
+    public DataPointsEntity getAllDataPointsForTopic(String topic) {
         String command = "SELECT * FROM timeseries " + "WHERE topic = '" + topic + "';";
         ResultSet results = session.execute(command);
 
@@ -37,6 +41,6 @@ public class TimeSeriesRepository {
             rowCount++;
         }
 
-        return new DataPoints(times, values);
+        return new DataPointsEntity(times, values);
     }
 }
