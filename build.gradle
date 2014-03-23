@@ -65,7 +65,10 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-websocket:${springBootVersion}"
+
+    // Jersey support
     compile "org.glassfish.jersey.containers:jersey-container-servlet:${jerseyServletVersion}"
+    compile "org.glassfish.jersey.ext:jersey-spring3:${jerseyServletVersion}"
     compile "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyClientVersion}"
 
     // Misc
