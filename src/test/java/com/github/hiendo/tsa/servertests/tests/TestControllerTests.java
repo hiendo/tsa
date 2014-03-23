@@ -12,7 +12,7 @@ public class TestControllerTests extends AbstractServerTests {
 
     @Test
     public void canGetTestEntity() throws Exception {
-        TestEntity testEntity = TestControllerOperations.getTestEntity();
+        TestEntity testEntity = testControllerOperations.getTestEntity();
 
         assertThat(testEntity, notNullValue());
         assertThat(testEntity.getTestValue(), notNullValue());

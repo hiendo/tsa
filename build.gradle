@@ -46,6 +46,7 @@ version = '1.0.0-SNAPSHOT'
 configurations {
     // We will use testng and matcher throughout
     all*.exclude group: 'junit'
+    all*.exclude group: 'org.hamcrest', module: 'hamcrest-all'
 
     // We will use log4j through-out.  Spring boot loads logback by default.
     all*.exclude group: 'commons-logging'
