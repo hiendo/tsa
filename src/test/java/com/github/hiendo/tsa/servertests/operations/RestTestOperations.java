@@ -14,12 +14,12 @@ public class RestTestOperations {
         this.webTarget = webTarget;
     }
 
-    public TestEntity getTestEntity() {
-        return webTarget.path("/testEntity").request().get(TestEntity.class);
+    public TestEntity getEntityFromController() {
+        return webTarget.path("/testController").request().get(TestEntity.class);
     }
 
-    public TestEntity getTestEntityFromResource() {
-        return webTarget.path("/rest/testresource").request().accept(MediaType.APPLICATION_JSON_TYPE).get(
+    public TestEntity getEntityFromResource() {
+        return webTarget.path("/rest/testResource").request().accept(MediaType.APPLICATION_JSON_TYPE).get(
                 TestEntity.class);
     }
 }

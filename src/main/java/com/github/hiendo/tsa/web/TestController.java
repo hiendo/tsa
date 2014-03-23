@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TestController {
     final static Logger logger = LoggerFactory.getLogger(TestController.class);
 
-	@RequestMapping(value = "testEntity", method = RequestMethod.GET)
+	@RequestMapping(value = "testController", method = RequestMethod.GET)
 	@ResponseBody
     public TestEntity getTestEntity() throws Exception {
         logger.debug("Sending test entity");

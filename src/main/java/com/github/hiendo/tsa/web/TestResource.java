@@ -13,7 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 
-@Path("testresource")
+@Path("testResource")
 public class TestResource {
     final static Logger logger = LoggerFactory.getLogger(TestResource.class);
 

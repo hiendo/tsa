@@ -12,7 +12,7 @@ public class RestTests extends AbstractServerTests {
 
     @Test
     public void canGetTestEntity() throws Exception {
-        TestEntity testEntity = restTestOperations.getTestEntity();
+        TestEntity testEntity = restTestOperations.getEntityFromController();
 
         assertThat(testEntity, notNullValue());
         assertThat(testEntity.getTestValue(), notNullValue());
@@ -20,7 +20,7 @@ public class RestTests extends AbstractServerTests {
 
     @Test
     public void canGetTestEntityUsingJerseyResource() throws Exception {
-        TestEntity testEntity = restTestOperations.getTestEntityFromResource();
+        TestEntity testEntity = restTestOperations.getEntityFromResource();
 
         assertThat(testEntity, notNullValue());
         assertThat(testEntity.getTestValue(), notNullValue());
