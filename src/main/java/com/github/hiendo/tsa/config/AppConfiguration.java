@@ -4,6 +4,9 @@ import org.apache.catalina.Context;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.JarScanner;
 import org.apache.tomcat.JarScannerCallback;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
@@ -25,6 +28,7 @@ import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfigurati
 import org.springframework.boot.autoconfigure.web.EmbeddedServletContainerAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.embedded.tomcat.TomcatContextCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -91,5 +95,14 @@ public class AppConfiguration implements WebSocketConfigurer {
         });
 
         return embeddedServletContainerFactory;
+    }
+
+    @Bean
+    public ServletRegistrationBean servletRegistrationBean(){
+        ResourceConfig resourceConfig = new ResourceConfig();
+        resourceConfig.packages("com.github.hiendo");
+        resourceConfig.register(JacksonFeature.class);
+        ServletContainer servletContainer = new org.glassfish.jersey.servlet.ServletContainer(resourceConfig);
+        return new ServletRegistrationBean(servletContainer,"/rest/*");
     }
 }

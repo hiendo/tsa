@@ -2,8 +2,9 @@ package com.github.hiendo.tsa.servertests;
 
 import com.github.hiendo.tsa.config.AppConfiguration;
 import com.github.hiendo.tsa.config.AppServerProperties;
+import com.github.hiendo.tsa.servertests.operations.RestTestOperations;
 import com.github.hiendo.tsa.servertests.operations.StaticFileOperations;
-import com.github.hiendo.tsa.servertests.operations.TestControllerOperations;
+import com.github.hiendo.tsa.servertests.operations.TimeSeriesOperations;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.grizzly.connector.GrizzlyConnectorProvider;
@@ -30,7 +31,8 @@ public class AbstractServerTests {
     private AppServerProperties appServerProperties;
 
     protected static StaticFileOperations staticFileOperations;
-    protected static TestControllerOperations testControllerOperations;
+    protected static RestTestOperations restTestOperations;
+    protected static TimeSeriesOperations timeSeriesOperations;
 
     @BeforeSuite
 	public void startupEmbeddedServer() throws Exception {
@@ -62,7 +64,8 @@ public class AbstractServerTests {
 
     private void setupOperationClasses(WebTarget webTarget) {
         staticFileOperations = new StaticFileOperations(webTarget);
-        testControllerOperations = new TestControllerOperations(webTarget);
+        restTestOperations = new RestTestOperations(webTarget);
+        timeSeriesOperations = new TimeSeriesOperations(webTarget);
     }
 
     private Future<ConfigurableApplicationContext> startupServer() throws Exception {
