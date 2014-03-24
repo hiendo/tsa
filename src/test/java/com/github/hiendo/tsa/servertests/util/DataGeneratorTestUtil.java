@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit;
 @Test(groups = "util")
 public class DataGeneratorTestUtil extends AbstractServerTests {
 
-    /*
-    http://localhost:9999/rest/topic/cpu.server1/chart?title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
+    /**
+     * http://localhost:9999/rest/topic/cpu.server1/chart?title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
      */
     @Test
     public void uploadFakeCpuData() throws Exception {
@@ -43,8 +43,8 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         }
     }
 
-    /*
-     http://localhost:9999/rest/topic/mem.server1/chart?title=Memory%20for%20Server%201&xAxisLabel=Date&yAxisLabel=Memory%20(MB)&connectPoints=true
+    /**
+     * http://localhost:9999/rest/topic/mem.server1/chart?title=Memory%20for%20Server%201&xAxisLabel=Date&yAxisLabel=Memory%20(MB)&connectPoints=true
      */
     @Test
     public void uploadMemData() throws Exception {
@@ -74,6 +74,10 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         }
     }
 
+    /**
+     * http://localhost:9999/rest/topic/alotOfPoints/chart?title=Alot%20Of%20Points&xAxisLabel=Date&yAxisLabel=Some%20Metric&connectPoints=false
+     * @throws Exception
+     */
     @Test
     public void uploadAlotOfDataPoints() throws Exception {
         int numPoints = 10000;
