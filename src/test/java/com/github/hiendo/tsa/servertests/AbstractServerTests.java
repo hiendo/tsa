@@ -11,7 +11,6 @@ import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.grizzly.connector.GrizzlyConnectorProvider;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.bind.PropertySourcesPropertyValues;
@@ -30,6 +29,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class AbstractServerTests {
+    private static final boolean RUN_EMBEDDED_SERVER = true;
+
     protected static ConfigurableApplicationContext context;
 
     private AppServerProperties appServerProperties;
@@ -42,21 +43,19 @@ public class AbstractServerTests {
 
     @BeforeSuite
 	public void startupEmbeddedServer() throws Exception {
-        EmbeddedCassandraServerHelper.startEmbeddedCassandra();
-        CQLDataLoader dataLoader = new CQLDataLoader("localhost", 9142);
-        dataLoader.load(new ClassPathCQLDataSet("schema.cql"));
-
-
-        loadProperties();
-
-        String serverBaseUrl = "http://localhost:" + appServerProperties.getPort();
-
-        Future<ConfigurableApplicationContext> startupFuture = startupServer();
-        WebTarget webTarget = setupClient(serverBaseUrl);
+        loadTestProperties();
+        WebTarget webTarget = setupClient(appServerProperties.getBaseUrl());
         setupOperationClasses(webTarget);
 
-        context = startupFuture.get(30, TimeUnit.SECONDS);
-        cassandraSession = context.getBean(Session.class);
+        if (RUN_EMBEDDED_SERVER) {
+            EmbeddedCassandraServerHelper.startEmbeddedCassandra();
+            CQLDataLoader dataLoader = new CQLDataLoader("localhost", 9142);
+            dataLoader.load(new ClassPathCQLDataSet("schema.cql"));
+
+            Future<ConfigurableApplicationContext> startupFuture = startupServer();
+            context = startupFuture.get(30, TimeUnit.SECONDS);
+            cassandraSession = context.getBean(Session.class);
+        }
     }
 
     @AfterSuite
@@ -66,7 +65,7 @@ public class AbstractServerTests {
         }
     }
 
-    private void loadProperties() throws Exception {
+    private void loadTestProperties() throws Exception {
         MutablePropertySources mutablePropertySources = PropertySourcesFactory.createPropertySources();
 
         appServerProperties = new AppServerProperties();
@@ -94,7 +93,6 @@ public class AbstractServerTests {
 
     private WebTarget setupClient(String serverBaseUrl) {
         ClientConfig clientConfig = new ClientConfig();
-        clientConfig.connectorProvider(new GrizzlyConnectorProvider());
         clientConfig.property(ClientProperties.ASYNC_THREADPOOL_SIZE, "5");
         Client client = ClientBuilder.newClient(clientConfig).register(JacksonFeature.class);
         return client.target(serverBaseUrl);

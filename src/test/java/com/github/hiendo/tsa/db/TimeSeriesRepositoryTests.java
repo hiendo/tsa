@@ -33,6 +33,7 @@ public class TimeSeriesRepositoryTests extends AbstractServerTests {
 
         DataPointsEntity dataPoints = timeSeriesRepository.getAllDataPointsForTopic("topic");
         assertThat("Data points", dataPoints, notNullValue());
+        assertThat("Data points topic", dataPoints.getTopic(), is("topic"));
         assertThat("Data points size", dataPoints.size(), is(2));
         assertThat("Data points time", dataPoints.getTimeAt(0), allOf(greaterThan(now - 100), lessThan(now + 100)));
         assertThat("Data points time", dataPoints.getTimeAt(1), allOf(greaterThan(now - 100), lessThan(now + 100)));

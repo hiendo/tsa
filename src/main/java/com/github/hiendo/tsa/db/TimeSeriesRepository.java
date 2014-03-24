@@ -41,6 +41,6 @@ public class TimeSeriesRepository {
             rowCount++;
         }
 
-        return new DataPointsEntity(times, values);
+        return new DataPointsEntity(topic, times, values);
     }
 }

@@ -1,0 +1,95 @@
+package com.github.hiendo.tsa.chart;
+
+import com.github.hiendo.tsa.db.DataPointsEntity;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.Color;
+import java.awt.Rectangle;
+import java.io.IOException;
+import java.io.OutputStream;
+
+/**
+ * Draws basic XY line chart.
+ */
+public class BasicXyLineChart {
+    final static Logger logger = LoggerFactory.getLogger(BasicXyLineChart.class);
+
+    private XyChartOptions chartOptions;
+
+    public BasicXyLineChart(XyChartOptions chartOptions) {
+        this.chartOptions = chartOptions;
+    }
+
+    public JFreeChart createChart(XYSeries... xySeries) {
+        return createChart(DatasetConverter.convertXySeriesToXyDataset(xySeries));
+    }
+
+    public JFreeChart createChart(XYDataset dataset) {
+        final JFreeChart chart = ChartFactory.createXYLineChart(chartOptions.getTitle(),
+                chartOptions.getxAxisLabel(),
+                chartOptions.getyAxisLabel(),
+                dataset,
+                PlotOrientation.VERTICAL,
+                true,           // include legend
+                true,           // tooltips
+                false           // urls
+        );
+        chart.setBackgroundPaint(Color.white);
+
+        // Set the chart background
+        XYPlot plot = chart.getXYPlot();
+        plot.setBackgroundPaint(Color.white);
+        plot.setDomainGridlinePaint(Color.lightGray);
+        plot.setRangeGridlinePaint(Color.lightGray);
+
+        // Mark the data points
+        final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        for (int i = 0; i < dataset.getSeriesCount(); i++) {
+            renderer.setSeriesLinesVisible(i, chartOptions.isConnectPoints());
+            renderer.setSeriesShapesVisible(i, true);
+            renderer.setShape(new Rectangle(1, 1));
+        }
+        plot.setRenderer(renderer);
+
+        if (chartOptions.isxAxisAsDate()) {
+            DateAxis dateAxis = new DateAxis(chartOptions.getxAxisLabel());
+            dateAxis.setDateFormatOverride(chartOptions.getDateFormat());
+            plot.setDomainAxis(dateAxis);
+        }
+
+        return chart;
+    }
+
+    public void writeChart(OutputStream outputStream, DataPointsEntity dataPointsEntity) {
+        long startCreateChart = System.currentTimeMillis();
+
+        XYSeries xySeries = new XYSeries(dataPointsEntity.getTopic());
+        for (int i = 0 ; i < dataPointsEntity.size(); i++) {
+            xySeries.add(dataPointsEntity.getTimeAt(i), dataPointsEntity.getValueAt(i));
+        }
+
+        try {
+            JFreeChart jFreeChart = createChart(xySeries);
+            long writeChartStart = System.currentTimeMillis();
+
+            logger.info("Chart creation generation took " + (writeChartStart - startCreateChart) / 1000.0);
+
+            ChartUtilities.writeChartAsJPEG(outputStream, jFreeChart, chartOptions.getWidth(),
+                    chartOptions.getHeight());
+
+            logger.info("Chart writing took " + (System.currentTimeMillis() - writeChartStart) / 1000.0);
+        } catch (IOException e) {
+            throw new RuntimeException("Error in writing chart to output stream", e);
+        }
+    }
+}

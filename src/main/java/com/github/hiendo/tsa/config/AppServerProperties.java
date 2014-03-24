@@ -19,4 +19,8 @@ public class AppServerProperties {
     public void setPort(int port) {
         this.port = port;
     }
+
+    public String getBaseUrl() {
+        return "http://localhost:" + getPort();
+    }
 }
