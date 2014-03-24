@@ -37,7 +37,7 @@ public class TimeSeriesTopicResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void addDataPoints(@PathParam("topic") String topic, DataPoint dataPoint) throws Exception {
-        timeSeriesRepository.saveTime(topic, dataPoint.getValue());
+        timeSeriesRepository.saveTime(topic, dataPoint);
 	}
 
     @GET

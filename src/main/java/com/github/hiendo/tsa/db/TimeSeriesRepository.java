@@ -4,10 +4,13 @@ package com.github.hiendo.tsa.db;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.github.hiendo.tsa.web.entities.DataPoint;
+import com.google.common.collect.ObjectArrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 // @todo: look here to implement shard:
 // http://planetcassandra.org/blog/post/getting-started-with-time-series-data-modeling/
@@ -21,9 +24,9 @@ public class TimeSeriesRepository {
         this.session = session;
     }
 
-    public void saveTime(String topic, double value) {
+    public void saveTime(String topic, DataPoint dataPoint) {
         String command = "INSERT INTO timeseries (topic, time, value) " +
-                        "VALUES ('" + topic + "', '" + new Date().getTime() + "', " + value + ");";
+                "VALUES ('" + topic + "', '" + dataPoint.getTime() + "', " + dataPoint.getValue() + ");";
         session.execute(command);
     }
 
@@ -31,11 +34,12 @@ public class TimeSeriesRepository {
         String command = "SELECT * FROM timeseries " + "WHERE topic = '" + topic + "';";
         ResultSet results = session.execute(command);
 
-        long[] times = new long[results.getAvailableWithoutFetching()];
-        double[] values = new double[results.getAvailableWithoutFetching()];
+        List<Row> rowList = results.all();
+        long[] times = new long[rowList.size()];
+        double[] values = new double[rowList.size()];
 
         int rowCount = 0;
-        for (Row row : results) {
+        for (Row row : rowList) {
             times[rowCount] = row.getDate("time").getTime();
             values[rowCount] = row.getDouble("value");
             rowCount++;

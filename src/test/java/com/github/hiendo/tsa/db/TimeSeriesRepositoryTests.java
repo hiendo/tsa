@@ -1,6 +1,7 @@
 package com.github.hiendo.tsa.db;
 
 import com.github.hiendo.tsa.servertests.AbstractServerTests;
+import com.github.hiendo.tsa.web.entities.DataPoint;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -26,19 +27,17 @@ public class TimeSeriesRepositoryTests extends AbstractServerTests {
 
     @Test
     public void canInsertTimeSeriesData() throws Exception {
-        long now = new Date().getTime();
-
-        timeSeriesRepository.saveTime("topic", 2.54);
-        timeSeriesRepository.saveTime("topic", 2.55);
+        timeSeriesRepository.saveTime("topic", new DataPoint(2, 2.2));
+        timeSeriesRepository.saveTime("topic", new DataPoint(3, 3.3));
 
         DataPointsEntity dataPoints = timeSeriesRepository.getAllDataPointsForTopic("topic");
         assertThat("Data points", dataPoints, notNullValue());
         assertThat("Data points topic", dataPoints.getTopic(), is("topic"));
         assertThat("Data points size", dataPoints.size(), is(2));
-        assertThat("Data points time", dataPoints.getTimeAt(0), allOf(greaterThan(now - 100), lessThan(now + 100)));
-        assertThat("Data points time", dataPoints.getTimeAt(1), allOf(greaterThan(now - 100), lessThan(now + 100)));
-        assertThat("Data points value", dataPoints.getValueAt(0), closeTo(2.54, .01));
-        assertThat("Data points value", dataPoints.getValueAt(1), closeTo(2.55, .01));
+        assertThat("Data points time", dataPoints.getTimeAt(0), is(2l));
+        assertThat("Data points time", dataPoints.getTimeAt(1), is(3l));
+        assertThat("Data points value", dataPoints.getValueAt(0), closeTo(2.2, .01));
+        assertThat("Data points value", dataPoints.getValueAt(1), closeTo(3.3, .01));
     }
 
     @Test

@@ -5,6 +5,7 @@ import com.github.hiendo.tsa.web.entities.DataPoint;
 import com.github.hiendo.tsa.web.entities.DataPoints;
 import org.glassfish.jersey.client.ClientResponse;
 import org.glassfish.jersey.internal.util.collection.ByteBufferInputStream;
+import org.joda.time.MutableDateTime;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -21,8 +22,13 @@ public class TimeSeriesTopicOperations {
         this.webTarget = webTarget;
     }
 
-    public void addData(String topic, double value) {
-        webTarget.path("/rest/topic/" + topic).request().post(Entity.json(new DataPoint(value)));
+    public void addDataOccuringNow(String topic, double value) {
+        webTarget.path("/rest/topic/" + topic).request()
+                .post(Entity.json(new DataPoint(MutableDateTime.now().toDate().getTime(), value)));
+    }
+
+    public void addData(String topic, DataPoint dataPoint) {
+        webTarget.path("/rest/topic/" + topic).request().post(Entity.json(dataPoint));
     }
 
     public DataPoints getDataForTopic(String topic) {

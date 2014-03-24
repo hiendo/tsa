@@ -95,7 +95,9 @@ dependencies {
 }
 
 test {
-    useTestNG()
+    useTestNG() {
+        excludeGroups 'util'
+    }
     include(["**/*Tests.class", "**/*Test.class"])
     exclude(["**/Abstract*.class", '**/*$*'])
 }

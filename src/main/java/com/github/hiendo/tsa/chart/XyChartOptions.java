@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
  * Options for a basic xy chart.  Options can be specified in a fluent-api-style.
  */
 public class XyChartOptions {
+    private static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("MM/dd-HH:mm");
 
     @QueryParam("title")
     @DefaultValue("Default Chart Title")
@@ -26,20 +27,20 @@ public class XyChartOptions {
     private boolean connectPoints = true;
 
     @QueryParam("xAxisAsDate")
-    @DefaultValue("false")
+    @DefaultValue("true")
     private boolean xAxisAsDate = true;
 
     @QueryParam("dateFormat")
     @DefaultValue("MM/dd-HH:mm")
-    private  SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd-HH:mm");
+    private SimpleDateFormat dateFormat = DEFAULT_DATE_FORMAT;
 
     @QueryParam("height")
     @DefaultValue("600")
     private int height = 600;
 
     @QueryParam("width")
-    @DefaultValue("400")
-    private int width = 400;
+    @DefaultValue("1000")
+    private int width = 1000;
 
     public static XyChartOptions newOptions() {
         return new XyChartOptions();
