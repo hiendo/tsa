@@ -13,23 +13,24 @@ import java.util.concurrent.TimeUnit;
 public class DataGeneratorTestUtil extends AbstractServerTests {
 
     /**
-     http://localhost:9999/api/topics/randomPoints/charts?title=Random%20Curve&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&connectPoints=false&xAxisAsDate=false&startX=300&endX=950
+     http://localhost:9999/api/charts/xyline?topic=curve10&topic=curve11&topic=curve12&topic=curve13&title=Comparing%20Different%20Topics&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&xAxisAsDate=false&connectPoints=true&startX=4&endX=95
      */
     @Test
-    public void uploadRandomDataPoints() throws Exception {
-        int numPoints = 1000;
-        String topic = "randomPoints";
+    public void uploadMultipleDifferentTopics() throws Exception {
+        int numPoints = 100;
         Random random = new Random();
 
-        for ( int i = 0; i < numPoints; i++) {
-            double xValue = i + random.nextDouble();
-            double yValue = xValue * xValue;
-            topicDataPointOperations.addData(topic, new DataPoint(xValue, yValue));
+        for (int curveNum = 10; curveNum <= 13; curveNum++) {
+            for (int i = 0; i < numPoints; i++) {
+                double xValue = i + random.nextDouble();
+                double yValue = xValue * curveNum;
+                topicDataPointOperations.addData("curve" + curveNum, new DataPoint(xValue, yValue));
+            }
         }
     }
 
     /**
-     http://localhost:9999/api/topics/cpu.server1/charts?title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
+     http://localhost:9999/api/charts/xyline?topic=cpu.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
      */
     @Test
     public void uploadFakeCpuData() throws Exception {
@@ -60,7 +61,7 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
     }
 
     /**
-     http://localhost:9999/api/topics/mem.server1/charts?title=Memory%20for%20Server%201&xAxisLabel=Date&yAxisLabel=Memory%20(MB)&connectPoints=true
+     http://localhost:9999/api/charts/xyline?topic=mem.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
      */
     @Test
     public void uploadMemData() throws Exception {
