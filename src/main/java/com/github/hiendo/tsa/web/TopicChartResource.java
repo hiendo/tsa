@@ -38,7 +38,8 @@ public class TopicChartResource {
     public Response queryImage(@PathParam("topic") String topic, @BeanParam XyChartOptions xyChartOptions)
             throws Exception {
 
-        final DataPointsEntity dataPointsEntity = dataPointRepository.getAllDataPointsForTopic(topic);
+        final DataPointsEntity dataPointsEntity =
+                dataPointRepository.getDataPointsForTopic(topic, xyChartOptions.getStartX(), xyChartOptions.getEndX());
 
         final BasicXyLineChart basicXyPlot = new BasicXyLineChart(xyChartOptions);
 

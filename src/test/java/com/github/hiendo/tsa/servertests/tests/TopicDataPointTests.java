@@ -39,6 +39,27 @@ public class TopicDataPointTests extends AbstractServerTests {
     }
 
     @Test
+    public void canGetYValuesInXValuesRange() throws Exception {
+        String topic = "topic-" + UUID.randomUUID();
+
+        basicDataPointOperation.addData(topic, new DataPoint(8, 8.8));
+        basicDataPointOperation.addData(topic, new DataPoint(5, 5.5));
+        basicDataPointOperation.addData(topic, new DataPoint(4, 4.4));
+        basicDataPointOperation.addData(topic, new DataPoint(6, 6.6));
+
+        DataPoints dataPoints = basicDataPointOperation.getDataForTopicInRange(topic, 4, 6);
+
+        assertThat("Data points", dataPoints, notNullValue());
+        assertThat("Data points size", dataPoints.size(), equalTo(3));
+        assertThat("Data points time", dataPoints.getY(0), closeTo(4, .01));
+        assertThat("Data points time", dataPoints.getY(1), closeTo(5, .01));
+        assertThat("Data points time", dataPoints.getY(2), closeTo(6, .01));
+        assertThat("Data points value", dataPoints.getX(0), closeTo(4.4, .01));
+        assertThat("Data points value", dataPoints.getX(1), closeTo(5.5, .01));
+        assertThat("Data points value", dataPoints.getX(2), closeTo(6.6, .01));
+    }
+
+    @Test
     public void canGetDataPointsWhenTopicHasNoDataYet() throws Exception {
         String topic = "topic-" + UUID.randomUUID();
 

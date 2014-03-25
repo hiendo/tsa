@@ -14,6 +14,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -40,14 +41,17 @@ public class TopicDataPointResource {
 	}
 
     /**
-     * Get all data points of the specified topic
+     * Get all data points of the specified topic between a certain x value range.
      *
      * @param topic topic to get points for
-     * @return all data points of topic
+     * @param startX start x range; null means to get all points up to end x range
+     * @param endX end x range; null means to get all points from start x range to infinity
+     * @return all data points of topic in the range
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public DataPoints getDataPoints(@PathParam("topic") String topic) {
-        return dataPointRepository.getAllDataPointsForTopic(topic).toApiEntity();
+    public DataPoints getDataPoints(@PathParam("topic") String topic, @QueryParam("start") Double startX,
+            @QueryParam("end") Double endX) {
+        return dataPointRepository.getDataPointsForTopic(topic, startX, endX).toApiEntity();
 	}
 }

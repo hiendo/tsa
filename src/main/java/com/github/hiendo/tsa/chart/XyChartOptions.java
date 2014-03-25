@@ -42,6 +42,12 @@ public class XyChartOptions {
     @DefaultValue("1000")
     private int width = 1000;
 
+    @QueryParam("startX")
+    private Double startX = null;
+
+    @QueryParam("endX")
+    private Double endX = null;
+
     public static XyChartOptions newOptions() {
         return new XyChartOptions();
     }
@@ -76,5 +82,13 @@ public class XyChartOptions {
 
     public int getWidth() {
         return width;
+    }
+
+    public Double getEndX() {
+        return endX;
+    }
+
+    public Double getStartX() {
+        return startX;
     }
 }

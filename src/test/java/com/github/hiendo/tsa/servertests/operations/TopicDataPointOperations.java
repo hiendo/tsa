@@ -22,4 +22,9 @@ public class TopicDataPointOperations {
     public DataPoints getDataForTopic(String topic) {
         return webTarget.path("/api/topics/" + topic + "/datapoints").request().get(DataPoints.class);
     }
+
+    public DataPoints getDataForTopicInRange(String topic, double start, double end) {
+        return webTarget.path("/api/topics/" + topic + "/datapoints").queryParam("start", start).queryParam("end", end)
+                .request().get(DataPoints.class);
+    }
 }

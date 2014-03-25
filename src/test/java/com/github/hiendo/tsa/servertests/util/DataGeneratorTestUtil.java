@@ -13,8 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class DataGeneratorTestUtil extends AbstractServerTests {
 
     /**
-     * http://localhost:9999/rest/topic/randomPoints/chart?title=Random%20Curve&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&connectPoints=false&xAxisAsDate=false
-     * @throws Exception
+     http://localhost:9999/api/topics/randomPoints/charts?title=Random%20Curve&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&connectPoints=false&xAxisAsDate=false&startX=300&endX=950
      */
     @Test
     public void uploadRandomDataPoints() throws Exception {
@@ -30,7 +29,7 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
     }
 
     /**
-     * http://localhost:9999/rest/topic/cpu.server1/chart?title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&xAxisAsDate=true
+     http://localhost:9999/api/topics/cpu.server1/charts?title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
      */
     @Test
     public void uploadFakeCpuData() throws Exception {
@@ -61,7 +60,7 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
     }
 
     /**
-     * http://localhost:9999/rest/topic/mem.server1/chart?title=Memory%20for%20Server%201&xAxisLabel=Date&yAxisLabel=Memory%20(MB)&connectPoints=true     * http://localhost:9999/rest/topic/cpu.server1/chart?title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&xAxisAsDate=true&xAxisAsDate=true
+     http://localhost:9999/api/topics/mem.server1/charts?title=Memory%20for%20Server%201&xAxisLabel=Date&yAxisLabel=Memory%20(MB)&connectPoints=true
      */
     @Test
     public void uploadMemData() throws Exception {
