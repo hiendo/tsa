@@ -38,8 +38,8 @@ public class AbstractServerTests {
 
     protected static StaticFileOperations staticFileOperations;
     protected static RestTestOperations restTestOperations;
-    protected static TopicDataPointOperations basicDataPointOperation;
-    protected static TopicChartOperations basicXyLineChartOperation;
+    protected static TopicDataPointOperations topicDataPointOperations;
+    protected static TopicChartOperations topicChartOperations;
 
     protected static Session cassandraSession;
 
@@ -78,8 +78,8 @@ public class AbstractServerTests {
     private void setupOperationClasses(WebTarget webTarget) {
         staticFileOperations = new StaticFileOperations(webTarget);
         restTestOperations = new RestTestOperations(webTarget);
-        basicDataPointOperation = new TopicDataPointOperations(webTarget);
-        basicXyLineChartOperation = new TopicChartOperations(webTarget);
+        topicDataPointOperations = new TopicDataPointOperations(webTarget);
+        topicChartOperations = new TopicChartOperations(webTarget);
     }
 
     private Future<ConfigurableApplicationContext> startupServer() throws Exception {

@@ -22,11 +22,11 @@ public class TopicDataPointTests extends AbstractServerTests {
         long now = MutableDateTime.now().toDate().getTime();
         String topic = "topic-" + UUID.randomUUID();
 
-        basicDataPointOperation.addData(topic, new DataPoint(44444, 4.4));
-        basicDataPointOperation.addData(topic, new DataPoint(33333, 3.3));
-        basicDataPointOperation.addData(topic, new DataPoint(now, 5.5));
+        topicDataPointOperations.addData(topic, new DataPoint(44444, 4.4));
+        topicDataPointOperations.addData(topic, new DataPoint(33333, 3.3));
+        topicDataPointOperations.addData(topic, new DataPoint(now, 5.5));
 
-        DataPoints dataPoints = basicDataPointOperation.getDataForTopic(topic);
+        DataPoints dataPoints = topicDataPointOperations.getDataForTopic(topic);
 
         assertThat("Data points", dataPoints, notNullValue());
         assertThat("Data points size", dataPoints.size(), equalTo(3));
@@ -42,12 +42,12 @@ public class TopicDataPointTests extends AbstractServerTests {
     public void canGetYValuesInXValuesRange() throws Exception {
         String topic = "topic-" + UUID.randomUUID();
 
-        basicDataPointOperation.addData(topic, new DataPoint(8, 8.8));
-        basicDataPointOperation.addData(topic, new DataPoint(5, 5.5));
-        basicDataPointOperation.addData(topic, new DataPoint(4, 4.4));
-        basicDataPointOperation.addData(topic, new DataPoint(6, 6.6));
+        topicDataPointOperations.addData(topic, new DataPoint(8, 8.8));
+        topicDataPointOperations.addData(topic, new DataPoint(5, 5.5));
+        topicDataPointOperations.addData(topic, new DataPoint(4, 4.4));
+        topicDataPointOperations.addData(topic, new DataPoint(6, 6.6));
 
-        DataPoints dataPoints = basicDataPointOperation.getDataForTopicInRange(topic, 4, 6);
+        DataPoints dataPoints = topicDataPointOperations.getDataForTopicInRange(topic, 4, 6);
 
         assertThat("Data points", dataPoints, notNullValue());
         assertThat("Data points size", dataPoints.size(), equalTo(3));
@@ -63,7 +63,7 @@ public class TopicDataPointTests extends AbstractServerTests {
     public void canGetDataPointsWhenTopicHasNoDataYet() throws Exception {
         String topic = "topic-" + UUID.randomUUID();
 
-        DataPoints dataPoints = basicDataPointOperation.getDataForTopic(topic);
+        DataPoints dataPoints = topicDataPointOperations.getDataForTopic(topic);
 
         assertThat("Data points", dataPoints, notNullValue());
         assertThat("Data points size", dataPoints.size(), equalTo(0));

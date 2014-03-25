@@ -24,7 +24,7 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         for ( int i = 0; i < numPoints; i++) {
             double xValue = i + random.nextDouble();
             double yValue = xValue * xValue;
-            basicDataPointOperation.addData(topic, new DataPoint(xValue, yValue));
+            topicDataPointOperations.addData(topic, new DataPoint(xValue, yValue));
         }
     }
 
@@ -43,19 +43,19 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         for ( int i = 0; i < 50; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 20 + random.nextInt(5) + random.nextDouble();
-            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
+            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
 
         for ( int i = 0; i < 150; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 60 + random.nextInt(10) + random.nextDouble();
-            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
+            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
 
         for ( int i = 0; i < 100; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 30 + random.nextInt(5) + random.nextDouble();
-            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
+            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
     }
 
@@ -74,19 +74,19 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         for ( int i = 0; i < 150; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 400 + random.nextInt(50) + random.nextDouble();
-            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
+            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
 
         for ( int i = 0; i < 50; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 900 + random.nextInt(100) + random.nextDouble();
-            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
+            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
 
         for ( int i = 0; i < 100; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 100 + random.nextInt(20) + random.nextDouble();
-            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
+            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
     }
 }

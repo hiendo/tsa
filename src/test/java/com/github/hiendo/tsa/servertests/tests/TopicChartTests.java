@@ -21,10 +21,10 @@ public class TopicChartTests extends AbstractServerTests {
     public void canDownloadBasicXyLineChart() throws Exception {
         String topic = "topic-" + UUID.randomUUID();
 
-        basicDataPointOperation.addData(topic, new DataPoint(44444, 4.4));
-        basicDataPointOperation.addData(topic, new DataPoint(33333, 3.3));
+        topicDataPointOperations.addData(topic, new DataPoint(44444, 4.4));
+        topicDataPointOperations.addData(topic, new DataPoint(33333, 3.3));
 
-        byte[] image = basicXyLineChartOperation.downloadDefaultLineChart(topic);
+        byte[] image = topicChartOperations.downloadDefaultLineChart(topic);
 
         verifyImageIsValid(image);
     }
@@ -33,7 +33,7 @@ public class TopicChartTests extends AbstractServerTests {
     public void canDowloadChartWhenTopicHasNoDataYet() throws Exception {
         String topic = "topic-" + UUID.randomUUID();
 
-        byte[] image = basicXyLineChartOperation.downloadDefaultLineChart(topic);
+        byte[] image = topicChartOperations.downloadDefaultLineChart(topic);
 
         verifyImageIsValid(image);
     }
