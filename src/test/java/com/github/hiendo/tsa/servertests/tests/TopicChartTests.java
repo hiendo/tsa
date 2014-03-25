@@ -18,7 +18,7 @@ import static org.testng.Assert.fail;
 public class TopicChartTests extends AbstractServerTests {
 
     @Test
-    public void canDownloadBasicXyLineChart() throws Exception {
+    public void canDownloadXyLineChart() throws Exception {
         String topic = "topic-" + UUID.randomUUID();
 
         topicDataPointOperations.addData(topic, new DataPoint(44444, 4.4));

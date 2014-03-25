@@ -17,6 +17,8 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Draws basic XY line chart.
@@ -70,16 +72,20 @@ public class BasicXyLineChart {
         return chart;
     }
 
-    public void writeChart(OutputStream outputStream, DataPointsEntity dataPointsEntity) {
+    public void writeChart(OutputStream outputStream, DataPointsEntity... dataPointsEntities) {
         long startCreateChart = System.currentTimeMillis();
 
-        XYSeries xySeries = new XYSeries(dataPointsEntity.getTopic());
-        for (int i = 0 ; i < dataPointsEntity.size(); i++) {
-            xySeries.add(dataPointsEntity.getX(i), dataPointsEntity.getY(i));
+        List<XYSeries> xySeriesList = new ArrayList<>();
+        for (DataPointsEntity dataPointsEntity : dataPointsEntities) {
+            XYSeries xySeries = new XYSeries(dataPointsEntity.getTopic());
+            xySeriesList.add(xySeries);
+            for (int i = 0; i < dataPointsEntity.size(); i++) {
+                xySeries.add(dataPointsEntity.getX(i), dataPointsEntity.getY(i));
+            }
         }
 
         try {
-            JFreeChart jFreeChart = createChart(xySeries);
+            JFreeChart jFreeChart = createChart(xySeriesList.toArray(new XYSeries[0]));
             long writeChartStart = System.currentTimeMillis();
 
             logger.info("Chart creation generation took " + (writeChartStart - startCreateChart) / 1000.0);

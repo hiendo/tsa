@@ -13,8 +13,8 @@ public class TopicChartOperations {
         this.webTarget = webTarget;
     }
 
-    public byte[] downloadDefaultLineChart(String topic) {
-        return webTarget.path("/api/topics/" + topic + "/charts").request().accept(APPLICATION_OCTET_STREAM)
-                .get(byte[].class);
+    public byte[] downloadDefaultLineChart(String... topic) {
+        return webTarget.path("/api/charts/xyline").queryParam("topic", topic).request()
+                .accept(APPLICATION_OCTET_STREAM).get(byte[].class);
     }
 }

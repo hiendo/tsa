@@ -14,18 +14,22 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
- * Basic charts for for a particular topic
+ * Charts for for a particular topic or list of topics
  */
-@Path("topics/{topic}/charts")
+@Path("charts")
 @Component
 public class TopicChartResource {
     final static Logger logger = LoggerFactory.getLogger(TopicChartResource.class);
@@ -34,19 +38,23 @@ public class TopicChartResource {
     private DataPointRepository dataPointRepository;
 
     @GET
+    @Path("xyline")
     @Produces({"image/jpeg", MediaType.APPLICATION_OCTET_STREAM + "; qs=0.9"}) // Stream used for testing
-    public Response queryImage(@PathParam("topic") String topic, @BeanParam XyChartOptions xyChartOptions)
+    public Response queryImage(@QueryParam(value = "topic") List<String> topics, @BeanParam XyChartOptions xyChartOptions)
             throws Exception {
 
-        final DataPointsEntity dataPointsEntity =
-                dataPointRepository.getDataPointsForTopic(topic, xyChartOptions.getStartX(), xyChartOptions.getEndX());
+        final List<DataPointsEntity> dataPointsEntities = new ArrayList<>();
+        for(String topic : topics) {
+            dataPointsEntities.add(dataPointRepository
+                    .getDataPointsForTopic(topic, xyChartOptions.getStartX(), xyChartOptions.getEndX()));
+        }
 
         final BasicXyLineChart basicXyPlot = new BasicXyLineChart(xyChartOptions);
 
         StreamingOutput stream = new StreamingOutput() {
              public void write(OutputStream outputStream) throws IOException, WebApplicationException {
                  try {
-                     basicXyPlot.writeChart(outputStream, dataPointsEntity);
+                     basicXyPlot.writeChart(outputStream, dataPointsEntities.toArray(new DataPointsEntity[0]));
                  } catch (Exception e) {
                      throw new WebApplicationException(e);
                  }
