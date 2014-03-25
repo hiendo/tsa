@@ -15,7 +15,7 @@ import static org.hamcrest.number.IsCloseTo.closeTo;
 
 
 @Test
-public class BasicDataPointTests extends AbstractServerTests {
+public class TopicDataPointTests extends AbstractServerTests {
 
     @Test
     public void canAddDataPoint() throws Exception {

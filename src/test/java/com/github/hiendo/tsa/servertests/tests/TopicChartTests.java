@@ -15,7 +15,7 @@ import static org.testng.Assert.fail;
 
 
 @Test
-public class BasicXyLineChartTests extends AbstractServerTests {
+public class TopicChartTests extends AbstractServerTests {
 
     @Test
     public void canDownloadBasicXyLineChart() throws Exception {

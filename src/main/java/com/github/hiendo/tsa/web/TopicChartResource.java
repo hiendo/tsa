@@ -4,17 +4,13 @@ import com.github.hiendo.tsa.chart.BasicXyLineChart;
 import com.github.hiendo.tsa.chart.XyChartOptions;
 import com.github.hiendo.tsa.db.DataPointsEntity;
 import com.github.hiendo.tsa.db.DataPointRepository;
-import com.github.hiendo.tsa.web.entities.DataPoint;
-import com.github.hiendo.tsa.web.entities.DataPoints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.BeanParam;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -26,29 +22,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 
-@Path("topic/{topic}/datapoints")
+/**
+ * Basic charts for for a particular topic
+ */
+@Path("topics/{topic}/charts")
 @Component
-public class DataPointResource {
-    final static Logger logger = LoggerFactory.getLogger(DataPointResource.class);
+public class TopicChartResource {
+    final static Logger logger = LoggerFactory.getLogger(TopicChartResource.class);
 
     @Autowired
     private DataPointRepository dataPointRepository;
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void addDataPoints(@PathParam("topic") String topic, DataPoint dataPoint) throws Exception {
-        dataPointRepository.saveDataPoint(topic, dataPoint);
-	}
-
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public DataPoints getDataPoints(@PathParam("topic") String topic) throws Exception {
-        return dataPointRepository.getAllDataPointsForTopic(topic).toApiEntity();
-	}
-
-    @GET
-    @Path("chart")
-    @Produces({"image/jpeg", MediaType.APPLICATION_OCTET_STREAM + "; qs=0.9"})
+    @Produces({"image/jpeg", MediaType.APPLICATION_OCTET_STREAM + "; qs=0.9"}) // Stream used for testing
     public Response queryImage(@PathParam("topic") String topic, @BeanParam XyChartOptions xyChartOptions)
             throws Exception {
 
