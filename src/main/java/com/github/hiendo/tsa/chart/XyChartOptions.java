@@ -28,7 +28,7 @@ public class XyChartOptions {
 
     @QueryParam("xAxisAsDate")
     @DefaultValue("true")
-    private boolean xAxisAsDate = true;
+    private boolean xAxisAsDate = false;
 
     @QueryParam("dateFormat")
     @DefaultValue("MM/dd-HH:mm")

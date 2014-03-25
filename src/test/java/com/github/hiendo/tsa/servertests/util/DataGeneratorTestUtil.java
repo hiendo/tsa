@@ -13,7 +13,24 @@ import java.util.concurrent.TimeUnit;
 public class DataGeneratorTestUtil extends AbstractServerTests {
 
     /**
-     * http://localhost:9999/rest/topic/cpu.server1/chart?title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
+     * http://localhost:9999/rest/topic/randomPoints/chart?title=Random%20Curve&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&connectPoints=false&xAxisAsDate=false
+     * @throws Exception
+     */
+    @Test
+    public void uploadRandomDataPoints() throws Exception {
+        int numPoints = 1000;
+        String topic = "randomPoints";
+        Random random = new Random();
+
+        for ( int i = 0; i < numPoints; i++) {
+            double xValue = i + random.nextDouble();
+            double yValue = xValue * xValue;
+            basicDataPointOperation.addData(topic, new DataPoint(xValue, yValue));
+        }
+    }
+
+    /**
+     * http://localhost:9999/rest/topic/cpu.server1/chart?title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&xAxisAsDate=true
      */
     @Test
     public void uploadFakeCpuData() throws Exception {
@@ -44,7 +61,7 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
     }
 
     /**
-     * http://localhost:9999/rest/topic/mem.server1/chart?title=Memory%20for%20Server%201&xAxisLabel=Date&yAxisLabel=Memory%20(MB)&connectPoints=true
+     * http://localhost:9999/rest/topic/mem.server1/chart?title=Memory%20for%20Server%201&xAxisLabel=Date&yAxisLabel=Memory%20(MB)&connectPoints=true     * http://localhost:9999/rest/topic/cpu.server1/chart?title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&xAxisAsDate=true&xAxisAsDate=true
      */
     @Test
     public void uploadMemData() throws Exception {
@@ -70,27 +87,6 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         for ( int i = 0; i < 100; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 100 + random.nextInt(20) + random.nextDouble();
-            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
-        }
-    }
-
-    /**
-     * http://localhost:9999/rest/topic/alotOfPoints/chart?title=Alot%20Of%20Points&xAxisLabel=Date&yAxisLabel=Some%20Metric&connectPoints=false
-     * @throws Exception
-     */
-    @Test
-    public void uploadAlotOfDataPoints() throws Exception {
-        int numPoints = 1000;
-        String topic = "alotOfPoints";
-        Random random = new Random();
-
-        long now = new Date().getTime();
-        long incrementCount = TimeUnit.DAYS.toMillis(1)/numPoints;
-        long incrementingTime = now;
-
-        for ( int i = 0; i < numPoints; i++) {
-            incrementingTime +=  incrementCount++;
-            double randomValue = 20 + random.nextInt(10) + random.nextDouble();
             basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
     }

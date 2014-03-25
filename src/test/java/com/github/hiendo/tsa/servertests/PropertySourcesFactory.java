@@ -35,7 +35,7 @@ public class PropertySourcesFactory {
         Resource fileSystemResourceOverride = new FileSystemResource("application.properties");
         if (fileSystemResourceOverride.exists()) {
             mutablePropertySources
-                    .addFirst(loader.load(new FileSystemResource("application.properties"), "app-override", NO_PROFILE));
+                    .addFirst(loader.load(fileSystemResourceOverride, "app-override", NO_PROFILE));
         }
 
         return mutablePropertySources;
