@@ -14,24 +14,19 @@ import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
 
-public class BasicDataPointOperation {
+public class BasicDataPointOperations {
 
     private WebTarget webTarget;
 
-    public BasicDataPointOperation(WebTarget webTarget) {
+    public BasicDataPointOperations(WebTarget webTarget) {
         this.webTarget = webTarget;
     }
 
     public void addData(String topic, DataPoint dataPoint) {
-        webTarget.path("/rest/topic/" + topic).request().post(Entity.json(dataPoint));
+        webTarget.path("/api/topic/" + topic + "/datapoints").request().post(Entity.json(dataPoint));
     }
 
     public DataPoints getDataForTopic(String topic) {
-        return webTarget.path("/rest/topic/" + topic).request().get(DataPoints.class);
-    }
-
-    public byte[] downloadGraph(String topic) {
-        return webTarget.path("/rest/topic/" + topic + "/chart").request().accept(APPLICATION_OCTET_STREAM)
-                .get(byte[].class);
+        return webTarget.path("/api/topic/" + topic + "/datapoints").request().get(DataPoints.class);
     }
 }

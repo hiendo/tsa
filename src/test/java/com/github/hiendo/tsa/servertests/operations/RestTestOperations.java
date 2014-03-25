@@ -17,9 +17,4 @@ public class RestTestOperations {
     public TestEntity getEntityFromController() {
         return webTarget.path("/testController").request().get(TestEntity.class);
     }
-
-    public TestEntity getEntityFromResource() {
-        return webTarget.path("/rest/testResource").request().accept(MediaType.APPLICATION_JSON_TYPE).get(
-                TestEntity.class);
-    }
 }

@@ -2,19 +2,15 @@ package com.github.hiendo.tsa.servertests.tests;
 
 import com.github.hiendo.tsa.servertests.AbstractServerTests;
 import com.github.hiendo.tsa.web.entities.DataPoint;
-import com.github.hiendo.tsa.web.entities.DataPoints;
-import org.joda.time.MutableDateTime;
 import org.testng.annotations.Test;
 
 import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.testng.Assert.fail;
 
 
@@ -28,7 +24,7 @@ public class BasicXyLineChartTests extends AbstractServerTests {
         basicDataPointOperation.addData(topic, new DataPoint(44444, 4.4));
         basicDataPointOperation.addData(topic, new DataPoint(33333, 3.3));
 
-        byte[] image = basicDataPointOperation.downloadGraph(topic);
+        byte[] image = basicXyLineChartOperation.downloadDefaultLineChart(topic);
 
         verifyImageIsValid(image);
     }
@@ -37,7 +33,7 @@ public class BasicXyLineChartTests extends AbstractServerTests {
     public void canDowloadChartWhenTopicHasNoDataYet() throws Exception {
         String topic = "topic-" + UUID.randomUUID();
 
-        byte[] image = basicDataPointOperation.downloadGraph(topic);
+        byte[] image = basicXyLineChartOperation.downloadDefaultLineChart(topic);
 
         verifyImageIsValid(image);
     }

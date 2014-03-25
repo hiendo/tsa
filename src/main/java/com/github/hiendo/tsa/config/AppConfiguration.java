@@ -109,7 +109,7 @@ public class AppConfiguration implements WebSocketConfigurer {
         resourceConfig.property(ServerProperties.TRACING, "ALL");
         //resourceConfig.register(LoggingFilter.class);
         ServletContainer servletContainer = new org.glassfish.jersey.servlet.ServletContainer(resourceConfig);
-        return new ServletRegistrationBean(servletContainer,"/rest/*");
+        return new ServletRegistrationBean(servletContainer,"/api/*");
     }
 
     @Bean

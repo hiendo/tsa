@@ -3,7 +3,8 @@ package com.github.hiendo.tsa.servertests;
 import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.config.AppConfiguration;
 import com.github.hiendo.tsa.config.AppServerProperties;
-import com.github.hiendo.tsa.servertests.operations.BasicDataPointOperation;
+import com.github.hiendo.tsa.servertests.operations.BasicDataPointOperations;
+import com.github.hiendo.tsa.servertests.operations.BasicXyLineChartOperation;
 import com.github.hiendo.tsa.servertests.operations.RestTestOperations;
 import com.github.hiendo.tsa.servertests.operations.StaticFileOperations;
 import org.cassandraunit.CQLDataLoader;
@@ -29,7 +30,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class AbstractServerTests {
-    private static final boolean RUN_EMBEDDED_SERVER = false;
+    private static final boolean RUN_EMBEDDED_SERVER = true;
 
     protected static ConfigurableApplicationContext context;
 
@@ -37,7 +38,8 @@ public class AbstractServerTests {
 
     protected static StaticFileOperations staticFileOperations;
     protected static RestTestOperations restTestOperations;
-    protected static BasicDataPointOperation basicDataPointOperation;
+    protected static BasicDataPointOperations basicDataPointOperation;
+    protected static BasicXyLineChartOperation basicXyLineChartOperation;
 
     protected static Session cassandraSession;
 
@@ -76,7 +78,8 @@ public class AbstractServerTests {
     private void setupOperationClasses(WebTarget webTarget) {
         staticFileOperations = new StaticFileOperations(webTarget);
         restTestOperations = new RestTestOperations(webTarget);
-        basicDataPointOperation = new BasicDataPointOperation(webTarget);
+        basicDataPointOperation = new BasicDataPointOperations(webTarget);
+        basicXyLineChartOperation = new BasicXyLineChartOperation(webTarget);
     }
 
     private Future<ConfigurableApplicationContext> startupServer() throws Exception {
