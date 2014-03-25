@@ -75,7 +75,7 @@ public class BasicXyLineChart {
 
         XYSeries xySeries = new XYSeries(dataPointsEntity.getTopic());
         for (int i = 0 ; i < dataPointsEntity.size(); i++) {
-            xySeries.add(dataPointsEntity.getTimeAt(i), dataPointsEntity.getValueAt(i));
+            xySeries.add(dataPointsEntity.getX(i), dataPointsEntity.getY(i));
         }
 
         try {
@@ -84,8 +84,7 @@ public class BasicXyLineChart {
 
             logger.info("Chart creation generation took " + (writeChartStart - startCreateChart) / 1000.0);
 
-            ChartUtilities.writeChartAsJPEG(outputStream, jFreeChart, chartOptions.getWidth(),
-                    chartOptions.getHeight());
+            ChartUtilities.writeChartAsJPEG(outputStream, jFreeChart, chartOptions.getWidth(), chartOptions.getHeight());
 
             logger.info("Chart writing took " + (System.currentTimeMillis() - writeChartStart) / 1000.0);
         } catch (IOException e) {

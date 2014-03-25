@@ -3,9 +3,9 @@ package com.github.hiendo.tsa.servertests;
 import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.config.AppConfiguration;
 import com.github.hiendo.tsa.config.AppServerProperties;
+import com.github.hiendo.tsa.servertests.operations.BasicDataPointOperation;
 import com.github.hiendo.tsa.servertests.operations.RestTestOperations;
 import com.github.hiendo.tsa.servertests.operations.StaticFileOperations;
-import com.github.hiendo.tsa.servertests.operations.TimeSeriesTopicOperations;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
@@ -37,7 +37,7 @@ public class AbstractServerTests {
 
     protected static StaticFileOperations staticFileOperations;
     protected static RestTestOperations restTestOperations;
-    protected static TimeSeriesTopicOperations timeSeriesTopicOperations;
+    protected static BasicDataPointOperation basicDataPointOperation;
 
     protected static Session cassandraSession;
 
@@ -76,7 +76,7 @@ public class AbstractServerTests {
     private void setupOperationClasses(WebTarget webTarget) {
         staticFileOperations = new StaticFileOperations(webTarget);
         restTestOperations = new RestTestOperations(webTarget);
-        timeSeriesTopicOperations = new TimeSeriesTopicOperations(webTarget);
+        basicDataPointOperation = new BasicDataPointOperation(webTarget);
     }
 
     private Future<ConfigurableApplicationContext> startupServer() throws Exception {

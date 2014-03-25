@@ -9,37 +9,37 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE,
         isGetterVisibility= JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class DataPoints {
-    private long[] times;
-    private double[] values;
+    private double[] xValues;
+    private double[] yValues;
 
     // Json serialization
     private DataPoints(){}
 
-    public DataPoints(long[] times, double[] values) {
-        assert times.length == values.length;
-        this.times = times;
-        this.values = values;
+    public DataPoints(double[] xValues, double[] yValues) {
+        assert xValues.length == yValues.length;
+        this.xValues = xValues;
+        this.yValues = yValues;
     }
 
     public int size() {
-        return times.length;
+        return xValues.length;
     }
 
     @JsonIgnore
-    public double getValueAt(int index) {
-        return values[index];
+    public double getX(int index) {
+        return yValues[index];
     }
 
     @JsonIgnore
-    public long getTimeAt(int index) {
-        return times[index];
+    public double getY(int index) {
+        return xValues[index];
     }
 
-    public long[] getTimes() {
-        return times;
+    public double[] getxValues() {
+        return xValues;
     }
 
-    public double[] getValues() {
-        return values;
+    public double[] getyValues() {
+        return yValues;
     }
 }

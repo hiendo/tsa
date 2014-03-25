@@ -19,7 +19,7 @@ public class StatsCalculator {
     public static DescriptiveStatistics getDescriptiveStatistics(DataPointsEntity dataPointsEntity) {
         DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
         for (int dataPointIndex = 0; dataPointIndex < dataPointsEntity.size(); dataPointIndex++) {
-            descriptiveStatistics.addValue(dataPointsEntity.getValueAt(dataPointIndex));
+            descriptiveStatistics.addValue(dataPointsEntity.getY(dataPointIndex));
         }
 
         return descriptiveStatistics;

@@ -3,7 +3,7 @@ package com.github.hiendo.tsa.web;
 import com.github.hiendo.tsa.chart.BasicXyLineChart;
 import com.github.hiendo.tsa.chart.XyChartOptions;
 import com.github.hiendo.tsa.db.DataPointsEntity;
-import com.github.hiendo.tsa.db.TimeSeriesRepository;
+import com.github.hiendo.tsa.db.DataPointRepository;
 import com.github.hiendo.tsa.web.entities.DataPoint;
 import com.github.hiendo.tsa.web.entities.DataPoints;
 import org.slf4j.Logger;
@@ -28,22 +28,22 @@ import java.io.OutputStream;
 
 @Path("topic/{topic}")
 @Component
-public class TimeSeriesTopicResource {
-    final static Logger logger = LoggerFactory.getLogger(TimeSeriesTopicResource.class);
+public class DataPointResource {
+    final static Logger logger = LoggerFactory.getLogger(DataPointResource.class);
 
     @Autowired
-    private TimeSeriesRepository timeSeriesRepository;
+    private DataPointRepository dataPointRepository;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void addDataPoints(@PathParam("topic") String topic, DataPoint dataPoint) throws Exception {
-        timeSeriesRepository.saveTime(topic, dataPoint);
+        dataPointRepository.saveDataPoint(topic, dataPoint);
 	}
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public DataPoints getDataPoints(@PathParam("topic") String topic) throws Exception {
-        return timeSeriesRepository.getAllDataPointsForTopic(topic).toApiEntity();
+        return dataPointRepository.getAllDataPointsForTopic(topic).toApiEntity();
 	}
 
     @GET
@@ -52,7 +52,7 @@ public class TimeSeriesTopicResource {
     public Response queryImage(@PathParam("topic") String topic, @BeanParam XyChartOptions xyChartOptions)
             throws Exception {
 
-        final DataPointsEntity dataPointsEntity = timeSeriesRepository.getAllDataPointsForTopic(topic);
+        final DataPointsEntity dataPointsEntity = dataPointRepository.getAllDataPointsForTopic(topic);
 
         final BasicXyLineChart basicXyPlot = new BasicXyLineChart(xyChartOptions);
 

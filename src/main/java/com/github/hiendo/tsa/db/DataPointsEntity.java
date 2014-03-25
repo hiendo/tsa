@@ -7,30 +7,30 @@ import com.github.hiendo.tsa.web.entities.DataPoints;
  */
 public class DataPointsEntity {
     private String topic = "";
-    private long[] times;
-    private double[] values;
+    private double[] xValues;
+    private double[] yValues;
 
-    public DataPointsEntity(String topic, long[] times, double[] values) {
-        assert times.length == values.length;
+    public DataPointsEntity(String topic, double[] xValues, double[] yValues) {
+        assert xValues.length == yValues.length;
         this.topic = topic;
-        this.times = times;
-        this.values = values;
+        this.xValues = xValues;
+        this.yValues = yValues;
     }
 
     public int size() {
-        return times.length;
+        return xValues.length;
     }
 
-    public double getValueAt(int index) {
-        return values[index];
+    public double getY(int index) {
+        return yValues[index];
     }
 
-    public long getTimeAt(int index) {
-        return times[index];
+    public double getX(int index) {
+        return xValues[index];
     }
 
     public DataPoints toApiEntity() {
-        return new DataPoints(times, values);
+        return new DataPoints(xValues, yValues);
     }
 
     public String getTopic() {

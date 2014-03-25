@@ -14,17 +14,12 @@ import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
 
-public class TimeSeriesTopicOperations {
+public class BasicDataPointOperation {
 
     private WebTarget webTarget;
 
-    public TimeSeriesTopicOperations(WebTarget webTarget) {
+    public BasicDataPointOperation(WebTarget webTarget) {
         this.webTarget = webTarget;
-    }
-
-    public void addDataOccuringNow(String topic, double value) {
-        webTarget.path("/rest/topic/" + topic).request()
-                .post(Entity.json(new DataPoint(MutableDateTime.now().toDate().getTime(), value)));
     }
 
     public void addData(String topic, DataPoint dataPoint) {

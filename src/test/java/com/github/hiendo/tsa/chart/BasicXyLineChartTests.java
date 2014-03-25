@@ -29,6 +29,6 @@ public class BasicXyLineChartTests {
     }
 
     private DataPointsEntity aDataPoints() {
-        return new DataPointsEntity("topic", new long[]{1, 2, 3}, new double[]{1.1, 2.2, 3.3});
+        return new DataPointsEntity("topic", new double[]{1, 2, 3}, new double[]{1.1, 2.2, 3.3});
     }
 }

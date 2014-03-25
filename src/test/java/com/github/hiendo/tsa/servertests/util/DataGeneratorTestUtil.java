@@ -27,19 +27,19 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         for ( int i = 0; i < 50; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 20 + random.nextInt(5) + random.nextDouble();
-            timeSeriesTopicOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
 
         for ( int i = 0; i < 150; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 60 + random.nextInt(10) + random.nextDouble();
-            timeSeriesTopicOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
 
         for ( int i = 0; i < 100; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 30 + random.nextInt(5) + random.nextDouble();
-            timeSeriesTopicOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
     }
 
@@ -58,19 +58,19 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         for ( int i = 0; i < 150; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 400 + random.nextInt(50) + random.nextDouble();
-            timeSeriesTopicOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
 
         for ( int i = 0; i < 50; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 900 + random.nextInt(100) + random.nextDouble();
-            timeSeriesTopicOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
 
         for ( int i = 0; i < 100; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 100 + random.nextInt(20) + random.nextDouble();
-            timeSeriesTopicOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
     }
 
@@ -80,7 +80,7 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
      */
     @Test
     public void uploadAlotOfDataPoints() throws Exception {
-        int numPoints = 10000;
+        int numPoints = 1000;
         String topic = "alotOfPoints";
         Random random = new Random();
 
@@ -91,7 +91,7 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         for ( int i = 0; i < numPoints; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 20 + random.nextInt(10) + random.nextDouble();
-            timeSeriesTopicOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            basicDataPointOperation.addData(topic, new DataPoint(incrementingTime, randomValue));
         }
     }
 }
