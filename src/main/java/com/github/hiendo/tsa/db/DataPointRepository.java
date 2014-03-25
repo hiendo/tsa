@@ -35,9 +35,9 @@ public class DataPointRepository {
      * @param dataPoint data point to save
      */
     public void saveDataPoint(String topic, DataPoint dataPoint) {
-        String command = "INSERT INTO datapoints (topic, xValue, yValue) " +
-                "VALUES ('" + topic + "', " + dataPoint.getxValue() + ", " + dataPoint.getyValue() + ");";
-        session.execute(command);
+        session.execute(
+                QueryBuilder.insertInto("datapoints").value("topic", topic).value("xValue", dataPoint.getxValue())
+                        .value("yValue", dataPoint.getyValue()));
     }
 
     /**
