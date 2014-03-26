@@ -1,12 +1,13 @@
 package com.github.hiendo.tsa.servertests;
 
+import com.codahale.metrics.graphite.Graphite;
 import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.config.AppConfiguration;
 import com.github.hiendo.tsa.config.AppServerProperties;
-import com.github.hiendo.tsa.servertests.operations.TopicChartOperations;
-import com.github.hiendo.tsa.servertests.operations.TopicDataPointOperations;
 import com.github.hiendo.tsa.servertests.operations.RestTestOperations;
 import com.github.hiendo.tsa.servertests.operations.StaticFileOperations;
+import com.github.hiendo.tsa.servertests.operations.TopicChartOperations;
+import com.github.hiendo.tsa.servertests.operations.TopicDataPointOperations;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
@@ -24,6 +25,7 @@ import org.testng.annotations.BeforeSuite;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import java.net.InetSocketAddress;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -42,6 +44,7 @@ public class AbstractServerTests {
     protected static TopicChartOperations topicChartOperations;
 
     protected static Session cassandraSession;
+    protected static Graphite graphite;
 
     @BeforeSuite
 	public void startupEmbeddedServer() throws Exception {
@@ -58,12 +61,19 @@ public class AbstractServerTests {
             context = startupFuture.get(30, TimeUnit.SECONDS);
             cassandraSession = context.getBean(Session.class);
         }
+
+        graphite = new Graphite(new InetSocketAddress("localhost", 2003));
+        graphite.connect();
     }
 
     @AfterSuite
 	public void shutdownEmbeddedServer() throws Exception {
         if (context != null) {
             context.close();
+        }
+
+        if (graphite != null) {
+            graphite.close();
         }
     }
 
@@ -75,7 +85,7 @@ public class AbstractServerTests {
         propertiesBinder.bind(new PropertySourcesPropertyValues(mutablePropertySources));
     }
 
-    private void setupOperationClasses(WebTarget webTarget) {
+    private void setupOperationClasses(WebTarget webTarget) throws Exception {
         staticFileOperations = new StaticFileOperations(webTarget);
         restTestOperations = new RestTestOperations(webTarget);
         topicDataPointOperations = new TopicDataPointOperations(webTarget);

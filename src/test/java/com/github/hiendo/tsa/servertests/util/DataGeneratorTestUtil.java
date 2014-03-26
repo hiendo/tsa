@@ -13,18 +13,17 @@ import java.util.concurrent.TimeUnit;
 public class DataGeneratorTestUtil extends AbstractServerTests {
 
     /**
-     http://localhost:9999/api/charts/xyline?topic=curve10&topic=curve11&topic=curve12&topic=curve13&title=Comparing%20Different%20Topics&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&xAxisAsDate=false&connectPoints=true&startX=4&endX=95
+     http://localhost:9999/api/charts/xyline?topic=curve10&topic=curve11&topic=curve12&topic=curve13&title=Comparing%20Different%20Topics&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&xAxisAsDate=false&connectPoints=true&startX=4&endX=10000
      */
     @Test
     public void uploadMultipleDifferentTopics() throws Exception {
-        int numPoints = 100;
-        Random random = new Random();
+        int numPoints = 10000;
 
         for (int curveNum = 10; curveNum <= 13; curveNum++) {
             for (int i = 0; i < numPoints; i++) {
-                double xValue = i + random.nextDouble();
+                long xValue = i;
                 double yValue = xValue * curveNum;
-                topicDataPointOperations.addData("curve" + curveNum, new DataPoint(xValue, yValue));
+                graphite.send("curve" + curveNum, String.valueOf(yValue), xValue);
             }
         }
     }
@@ -45,18 +44,19 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
             incrementingTime +=  incrementCount++;
             double randomValue = 20 + random.nextInt(5) + random.nextDouble();
             topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
         }
 
         for ( int i = 0; i < 150; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 60 + random.nextInt(10) + random.nextDouble();
-            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
         }
 
         for ( int i = 0; i < 100; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 30 + random.nextInt(5) + random.nextDouble();
-            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
         }
     }
 
@@ -75,19 +75,19 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         for ( int i = 0; i < 150; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 400 + random.nextInt(50) + random.nextDouble();
-            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
         }
 
         for ( int i = 0; i < 50; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 900 + random.nextInt(100) + random.nextDouble();
-            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
         }
 
         for ( int i = 0; i < 100; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 100 + random.nextInt(20) + random.nextDouble();
-            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
         }
     }
 }

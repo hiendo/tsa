@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-
+@Test
 public class RestTests extends AbstractServerTests {
 
     @Test

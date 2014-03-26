@@ -2,15 +2,16 @@ package com.github.hiendo.tsa.config;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
+import com.github.hiendo.tsa.chart.BasicXyLineChart;
+import com.github.hiendo.tsa.netty.GraphiteDataImporterServer;
 import org.apache.catalina.Context;
-import org.apache.log4j.Logger;
 import org.apache.tomcat.JarScanner;
 import org.apache.tomcat.JarScannerCallback;
-import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.servlet.ServletContainer;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
@@ -64,7 +65,7 @@ import java.util.Set;
 @EnableWebSocket
 public class AppConfiguration implements WebSocketConfigurer {
 
-    private static final Logger logger = Logger.getLogger(AppConfiguration.class);
+    final static org.slf4j.Logger logger = LoggerFactory.getLogger(BasicXyLineChart.class);
 
     @Autowired
     private AppServerProperties appServerProperties;
