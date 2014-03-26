@@ -1,12 +1,5 @@
-/*
- * Project Horizon
- * (c) 2013 VMware, Inc. All rights reserved.
- * VMware Confidential.
- */
-
 package com.github.hiendo.tsa.netty;
 
-import com.github.hiendo.tsa.config.AppConfiguration;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -22,8 +15,6 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.CharsetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

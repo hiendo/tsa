@@ -1,27 +1,14 @@
-/*
- * Project Horizon
- * (c) 2013 VMware, Inc. All rights reserved.
- * VMware Confidential.
- */
 
 package com.github.hiendo.tsa.servertests.tests;
 
-import com.codahale.metrics.graphite.Graphite;
 import com.github.hiendo.tsa.servertests.AbstractServerTests;
 import com.github.hiendo.tsa.web.entities.DataPoint;
 import com.github.hiendo.tsa.web.entities.DataPoints;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.testng.Assert.fail;
 
 /**

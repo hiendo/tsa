@@ -1,31 +1,9 @@
-/*
- * Project Horizon
- * (c) 2013 VMware, Inc. All rights reserved.
- * VMware Confidential.
- */
-
 package com.github.hiendo.tsa.servertests.tests;
 
-import com.codahale.metrics.graphite.Graphite;
 import com.github.hiendo.tsa.servertests.AbstractServerTests;
-import com.github.hiendo.tsa.web.entities.DataPoint;
 import com.github.hiendo.tsa.web.entities.DataPoints;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
