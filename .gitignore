@@ -11,3 +11,4 @@ test-output
 classes
 build
 gradle.properties
+application.properties

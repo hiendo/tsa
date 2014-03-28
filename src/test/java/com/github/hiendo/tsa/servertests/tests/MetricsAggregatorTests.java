@@ -4,7 +4,6 @@ import com.github.hiendo.tsa.servertests.AbstractServerTests;
 import com.github.hiendo.tsa.web.entities.AggregatedStatsSet;
 import com.github.hiendo.tsa.web.entities.DataPoint;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
@@ -50,17 +49,17 @@ public class MetricsAggregatorTests extends AbstractServerTests {
 
         assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(0).getStartX(), closeTo(0.0, .01));
         assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(0).getEndX(), closeTo(10, .01));
-        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(0).getNumberOfPoints(), is(2));
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(0).getNumberOfDataPoints(), is(2));
         assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(0).getMax(), closeTo(5, .01));
 
         assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(1).getStartX(), closeTo(100, .01));
         assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(1).getEndX(), closeTo(190, .01));
-        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(1).getNumberOfPoints(), is(3));
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(1).getNumberOfDataPoints(), is(3));
         assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(1).getMax(), closeTo(19, .01));
 
         assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(2).getStartX(), closeTo(220, .01));
         assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(2).getEndX(), closeTo(280, .01));
-        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(2).getNumberOfPoints(), is(4));
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(2).getNumberOfDataPoints(), is(4));
         assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(2).getMax(), closeTo(280, .01));
     }
 
@@ -75,12 +74,12 @@ public class MetricsAggregatorTests extends AbstractServerTests {
 
         assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(0).getStartX(), closeTo(100, .01));
         assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(0).getEndX(), closeTo(190, .01));
-        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(0).getNumberOfPoints(), is(3));
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(0).getNumberOfDataPoints(), is(3));
         assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(0).getMax(), closeTo(19, .01));
 
         assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(1).getStartX(), closeTo(220, .01));
         assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(1).getEndX(), closeTo(280, .01));
-        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(1).getNumberOfPoints(), is(4));
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(1).getNumberOfDataPoints(), is(4));
         assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(1).getMax(), closeTo(280, .01));
     }
 }

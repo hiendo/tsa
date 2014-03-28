@@ -11,20 +11,22 @@ public class AggregatedStats {
 
     double startX;
     double endX;
-    int numberOfPoints;
+    int numberOfDataPoints;
     private double mean;
     private double median;
     private double min;
     private double max;
+    private double sum;
 
     // Json serialization
     private AggregatedStats(){}
 
-    public AggregatedStats(double startX, double endX, int numberOfPoints, double mean, double median, double min,
+    public AggregatedStats(double startX, double endX, int numberOfDataPoints, double sum, double mean, double median, double min,
             double max) {
         this.startX = startX;
         this.endX = endX;
-        this.numberOfPoints = numberOfPoints;
+        this.numberOfDataPoints = numberOfDataPoints;
+        this.sum = sum;
         this.mean = mean;
         this.median = median;
         this.min = min;
@@ -39,8 +41,8 @@ public class AggregatedStats {
         return endX;
     }
 
-    public int getNumberOfPoints() {
-        return numberOfPoints;
+    public int getNumberOfDataPoints() {
+        return numberOfDataPoints;
     }
 
     public double getMean() {
@@ -57,5 +59,9 @@ public class AggregatedStats {
 
     public double getMax() {
         return max;
+    }
+
+    public double getSum() {
+        return sum;
     }
 }

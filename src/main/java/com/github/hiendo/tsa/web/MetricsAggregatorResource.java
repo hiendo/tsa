@@ -61,8 +61,9 @@ public class MetricsAggregatorResource {
             DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics(dataPoints.getYValues());
             aggregatedStatsList
                     .add(new AggregatedStats(dataPoints.getFirstX(), dataPoints.getLastX(), dataPoints.size(),
-                            descriptiveStatistics.getMean(), descriptiveStatistics.getMean(),
-                            descriptiveStatistics.getMin(), descriptiveStatistics.getMax()));
+                            descriptiveStatistics.getSum(), descriptiveStatistics.getMean(),
+                            descriptiveStatistics.getMean(), descriptiveStatistics.getMin(),
+                            descriptiveStatistics.getMax()));
         }
 
         return new AggregatedStatsSet(aggregatedStatsList);
