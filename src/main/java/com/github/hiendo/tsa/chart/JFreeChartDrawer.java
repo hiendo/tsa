@@ -13,6 +13,11 @@ import org.slf4j.LoggerFactory;
 public class JFreeChartDrawer {
     final static Logger logger = LoggerFactory.getLogger(JFreeChartDrawer.class);
 
+    /**
+     * Draw a chart out to the windows frame
+     *
+     * @param chart chart to draw.
+     */
     public static void drawChart(JFreeChart chart) {
         ApplicationFrame applicationFrame = new ApplicationFrame("");
         ChartPanel chartPanel = new ChartPanel(chart);

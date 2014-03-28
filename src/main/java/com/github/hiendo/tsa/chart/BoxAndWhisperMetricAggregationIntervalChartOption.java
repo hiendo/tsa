@@ -7,13 +7,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * Options for a box and whisker chart with stats aggregation in time increments.
  */
-public class BoxAndWhisperStatAggregationInTimeChartOption extends ChartOptions {
+public class BoxAndWhisperMetricAggregationIntervalChartOption extends ChartOptions {
 
-    @QueryParam("timeIncrementInSec")
+    @QueryParam("interval")
     @DefaultValue("3600000") // 1 hour
-    private long timeIncrementInSec = TimeUnit.HOURS.toMillis(1);
+    private long interval = TimeUnit.HOURS.toMillis(1);
 
-    public long getTimeIncrementInSec() {
-        return timeIncrementInSec;
+    public long getInterval() {
+        return interval;
     }
 }

@@ -21,6 +21,15 @@ public class TimeIntervalDatapointsSplitter {
      * @return set of DataPoints
      */
     public DataPointsSet splitDatapoints(DataPointsEntity dataPointsEntity, double start, double interval) {
+        double firstXValue = dataPointsEntity.getX(0);
+        if (start < firstXValue) {
+            while (start <= firstXValue) {
+                start += interval;
+            }
+
+            start -= interval;
+        }
+
         List<DataPointsEntity> dataPointsEntities = new ArrayList<>();
         double nextResetCounter = start + interval;
 

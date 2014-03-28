@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Resource to add a data point against a topic
+ * Resource to retrieve aggregated stats for a topic
  */
 @Path("topics/{topic}/aggregator")
 @Component

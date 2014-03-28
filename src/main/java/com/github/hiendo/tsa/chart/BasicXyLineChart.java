@@ -32,10 +32,22 @@ public class BasicXyLineChart {
         this.chartOptions = chartOptions;
     }
 
+    /**
+     * Create a single chart with line graphs, each represent by a series of point
+     *
+     * @param xySeries set of data sets to graph
+     * @return a chart
+     */
     public JFreeChart createChart(XYSeries... xySeries) {
         return createChart(DatasetConverter.convertXySeriesToXyDataset(xySeries));
     }
 
+    /**
+     * Create a single chart with line graphs
+     *
+     * @param dataset data sets to graph
+     * @return a chart
+     */
     public JFreeChart createChart(XYDataset dataset) {
         final JFreeChart chart = ChartFactory.createXYLineChart(chartOptions.getTitle(),
                 chartOptions.getxAxisLabel(),
@@ -72,6 +84,12 @@ public class BasicXyLineChart {
         return chart;
     }
 
+    /**
+     * Create a chart and write out data to stream.
+     *
+     * @param outputStream output stream to write chart to
+     * @param dataPointsEntities set of DataPoints to graph
+     */
     public void writeChart(OutputStream outputStream, DataPointsEntity... dataPointsEntities) {
         long startCreateChart = System.currentTimeMillis();
 
