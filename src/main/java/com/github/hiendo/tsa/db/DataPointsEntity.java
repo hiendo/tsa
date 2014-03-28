@@ -36,4 +36,16 @@ public class DataPointsEntity {
     public String getTopic() {
         return topic;
     }
+
+    public double[] getYValues() {
+        return yValues;
+    }
+
+    public double getFirstX() {
+        return xValues[0];
+    }
+
+    public double getLastX() {
+        return xValues[size() - 1];
+    }
 }

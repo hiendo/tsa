@@ -4,7 +4,6 @@ package com.github.hiendo.tsa.servertests.operations;
 import com.github.hiendo.tsa.web.entities.TestEntity;
 
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 
 public class RestTestOperations {
 

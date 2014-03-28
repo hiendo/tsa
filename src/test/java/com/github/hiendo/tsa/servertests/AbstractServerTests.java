@@ -4,6 +4,7 @@ import com.codahale.metrics.graphite.Graphite;
 import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.config.AppConfiguration;
 import com.github.hiendo.tsa.config.AppServerProperties;
+import com.github.hiendo.tsa.servertests.operations.MetricsAggregatorOperations;
 import com.github.hiendo.tsa.servertests.operations.RestTestOperations;
 import com.github.hiendo.tsa.servertests.operations.StaticFileOperations;
 import com.github.hiendo.tsa.servertests.operations.TopicChartOperations;
@@ -42,6 +43,7 @@ public class AbstractServerTests {
     protected static RestTestOperations restTestOperations;
     protected static TopicDataPointOperations topicDataPointOperations;
     protected static TopicChartOperations topicChartOperations;
+    protected static MetricsAggregatorOperations metricsAggregatorOperations;
 
     protected static Session cassandraSession;
     protected static Graphite graphite;
@@ -90,6 +92,7 @@ public class AbstractServerTests {
         restTestOperations = new RestTestOperations(webTarget);
         topicDataPointOperations = new TopicDataPointOperations(webTarget);
         topicChartOperations = new TopicChartOperations(webTarget);
+        metricsAggregatorOperations = new MetricsAggregatorOperations(webTarget);
     }
 
     private Future<ConfigurableApplicationContext> startupServer() throws Exception {

@@ -8,8 +8,6 @@ import org.jfree.data.xy.XYSeriesCollection;
  * Convert one dataset format to another.
  */
 public class DatasetConverter {
-    private DatasetConverter() {
-    }
 
     /**
      * Convert the specified list of series to a dataset.

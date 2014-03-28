@@ -7,9 +7,6 @@ import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
  * Convenient utility methods for calculating stats.
  */
 public class StatsCalculator {
-    private StatsCalculator() {
-    }
-
     /**
      * Get the stats for the values in the data points
      *

@@ -2,6 +2,7 @@ package com.github.hiendo.tsa.servertests.tests;
 
 import com.github.hiendo.tsa.servertests.AbstractServerTests;
 import com.github.hiendo.tsa.web.entities.DataPoint;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.imageio.ImageIO;
@@ -17,9 +18,15 @@ import static org.testng.Assert.fail;
 @Test
 public class TopicChartTests extends AbstractServerTests {
 
+    private String topic;
+
+    @BeforeMethod
+    public void setUp() throws Exception {
+        topic = "topic-" + UUID.randomUUID();
+    }
+
     @Test
     public void canDownloadXyLineChart() throws Exception {
-        String topic = "topic-" + UUID.randomUUID();
 
         topicDataPointOperations.addData(topic, new DataPoint(44444, 4.4));
         topicDataPointOperations.addData(topic, new DataPoint(33333, 3.3));
@@ -31,8 +38,6 @@ public class TopicChartTests extends AbstractServerTests {
 
     @Test
     public void canDowloadChartWhenTopicHasNoDataYet() throws Exception {
-        String topic = "topic-" + UUID.randomUUID();
-
         byte[] image = topicChartOperations.downloadDefaultLineChart(topic);
 
         verifyImageIsValid(image);
