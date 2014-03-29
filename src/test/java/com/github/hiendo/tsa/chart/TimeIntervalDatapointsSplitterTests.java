@@ -33,7 +33,7 @@ public class TimeIntervalDatapointsSplitterTests {
     }
 
     @Test
-    public void canAggregateStatsInTimeEvenWhenStartValueIsReallyLow() throws IOException {
+    public void canAggregateStatsInTimeEvenWhenStartValueIsMoreThanIntervalTimeLowerThanFirstValue() throws IOException {
         TimeIntervalDatapointsSplitter timeIntervalDatapointsSplitter = new TimeIntervalDatapointsSplitter();
 
         DataPointsEntity dataPointsEntity =
@@ -50,6 +50,36 @@ public class TimeIntervalDatapointsSplitterTests {
         assertThat("stats set", timeIntervalDataPointsSplitterResult.getDataPoints(2), matchingThirdSet());
     }
 
+    @Test
+    public void canAggregateStatsInTimeEvenWhenStartValueIsWithinAnIntervalTimeLowerThanFirstValue() throws IOException {
+        TimeIntervalDatapointsSplitter timeIntervalDatapointsSplitter = new TimeIntervalDatapointsSplitter();
+
+        DataPointsEntity dataPointsEntity =
+                new DataPointsEntity("topic", new double[]{0, 40, 120, 140, 160, 200, 210, 220, 230},
+                        new double[]{1, 41, 121, 141, 161, 201, 211, 221, 231});
+
+        DataPointsSet timeIntervalDataPointsSplitterResult =
+                timeIntervalDatapointsSplitter.splitDatapoints(dataPointsEntity, -1, 100);
+
+        assertThat("stats set", timeIntervalDataPointsSplitterResult, notNullValue());
+        assertThat("stats set size", timeIntervalDataPointsSplitterResult.getSize(), is(3));
+        assertThat("stats set", timeIntervalDataPointsSplitterResult.getDataPoints(0), matchingFirstSet());
+        assertThat("stats set", timeIntervalDataPointsSplitterResult.getDataPoints(1), matchingSecondSet());
+        assertThat("stats set", timeIntervalDataPointsSplitterResult.getDataPoints(2), matchingThirdSet());
+    }
+
+    @Test
+    public void returnEmptyAggregateStatsThereAreNoDatapoints() throws IOException {
+        TimeIntervalDatapointsSplitter timeIntervalDatapointsSplitter = new TimeIntervalDatapointsSplitter();
+
+        DataPointsEntity dataPointsEntity = new DataPointsEntity("topic", new double[]{}, new double[]{});
+
+        DataPointsSet timeIntervalDataPointsSplitterResult =
+                timeIntervalDatapointsSplitter.splitDatapoints(dataPointsEntity, 0, 100);
+
+        assertThat("stats set", timeIntervalDataPointsSplitterResult, notNullValue());
+        assertThat("stats set size", timeIntervalDataPointsSplitterResult.getSize(), is(0));
+    }
 
     private TypeSafeMatcher<DataPointsEntity> matchingFirstSet() {
         return new TypeSafeMatcher<DataPointsEntity>() {

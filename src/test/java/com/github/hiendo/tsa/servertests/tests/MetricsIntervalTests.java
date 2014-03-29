@@ -16,7 +16,7 @@ import static org.hamcrest.number.IsCloseTo.closeTo;
 
 
 @Test
-public class MetricsAggregatorTests extends AbstractServerTests {
+public class MetricsIntervalTests extends AbstractServerTests {
 
     private String topic;
 
@@ -39,10 +39,8 @@ public class MetricsAggregatorTests extends AbstractServerTests {
 
     @Test
     public void canAggregateStats() throws Exception {
-
-
         AggregatedStatsSet aggregatedStatsSet =
-                metricsAggregatorOperations.aggregateMetricByTimeInterval(topic, 0, 100);
+                metricsIntervalOperations.aggregateMetricByTimeInterval(topic, 0, 100);
 
         assertThat("Data points", aggregatedStatsSet, notNullValue());
         assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(3));
@@ -63,11 +61,36 @@ public class MetricsAggregatorTests extends AbstractServerTests {
         assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(2).getMax(), closeTo(280, .01));
     }
 
+    @Test
+    public void canAggregateStatsWhenStartIsLowerThanFirstValueByMoreThanInterval() throws Exception {
+        AggregatedStatsSet aggregatedStatsSet =
+                metricsIntervalOperations.aggregateMetricByTimeInterval(topic, -1000000, 100);
+
+        assertThat("Data points", aggregatedStatsSet, notNullValue());
+        assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(3));
+
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(0).getNumberOfDataPoints(), is(2));
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(1).getNumberOfDataPoints(), is(3));
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(2).getNumberOfDataPoints(), is(4));
+    }
 
     @Test
-    public void canAggregateStatsWithTimeRange() throws Exception {
+    public void canAggregateStatsWhenStartIsLowerThanFirstValueWithinAnInterval() throws Exception {
         AggregatedStatsSet aggregatedStatsSet =
-                metricsAggregatorOperations.aggregateMetricByTimeInterval(topic, 100, 100);
+                metricsIntervalOperations.aggregateMetricByTimeInterval(topic, -5, 100);
+
+        assertThat("Data points", aggregatedStatsSet, notNullValue());
+        assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(3));
+
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(0).getNumberOfDataPoints(), is(2));
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(1).getNumberOfDataPoints(), is(3));
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(2).getNumberOfDataPoints(), is(4));
+    }
+
+    @Test
+    public void canAggregateStatsWithStartGreaterThanFirstValue() throws Exception {
+        AggregatedStatsSet aggregatedStatsSet =
+                metricsIntervalOperations.aggregateMetricByTimeInterval(topic, 100, 100);
 
         assertThat("Data points", aggregatedStatsSet, notNullValue());
         assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(2));

@@ -15,7 +15,7 @@ import static org.hamcrest.number.IsCloseTo.closeTo;
  *
  */
 @Test
-public class GraphiterDataImporterServerTests extends AbstractServerTests {
+public class GraphiteDataImporterServerTests extends AbstractServerTests {
 
     @Test
     public void canSendGraphiteData() throws Exception {

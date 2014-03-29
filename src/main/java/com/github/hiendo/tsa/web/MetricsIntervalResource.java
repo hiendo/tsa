@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -24,10 +25,10 @@ import java.util.List;
 /**
  * Resource to retrieve aggregated stats for a topic
  */
-@Path("topics/{topic}/aggregator")
+@Path("topics/{topic}/metrics")
 @Component
-public class MetricsAggregatorResource {
-    final static Logger logger = LoggerFactory.getLogger(MetricsAggregatorResource.class);
+public class MetricsIntervalResource {
+    final static Logger logger = LoggerFactory.getLogger(MetricsIntervalResource.class);
 
     @Autowired
     private TimeIntervalDatapointsSplitter timeIntervalDatapointsSplitter;
@@ -48,8 +49,8 @@ public class MetricsAggregatorResource {
     @Path("interval")
     @Produces(MediaType.APPLICATION_JSON)
     public AggregatedStatsSet getAggregatedStatsSetByInterval(@PathParam("topic") String topic,
-            @QueryParam("start") Double startX, @QueryParam("end") Double endX,
-            @QueryParam("interval") Double interval) {
+            @QueryParam("start") @DefaultValue("0") Double startX, @QueryParam("end") Double endX,
+            @QueryParam("interval") @DefaultValue("3600000") Double interval) {
         DataPointsEntity allDatapoints = dataPointRepository.getDataPointsForTopic(topic, startX, endX);
         DataPointsSet dataPointsSet =
                 timeIntervalDatapointsSplitter.splitDatapoints(allDatapoints, startX, interval);

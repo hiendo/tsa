@@ -31,14 +31,32 @@ public class TopicChartTests extends AbstractServerTests {
         topicDataPointOperations.addData(topic, new DataPoint(44444, 4.4));
         topicDataPointOperations.addData(topic, new DataPoint(33333, 3.3));
 
-        byte[] image = topicChartOperations.downloadDefaultLineChart(topic);
+        byte[] image = topicChartOperations.downloadXYLineChart(topic);
 
         verifyImageIsValid(image);
     }
 
     @Test
     public void canDowloadChartWhenTopicHasNoDataYet() throws Exception {
-        byte[] image = topicChartOperations.downloadDefaultLineChart(topic);
+        byte[] image = topicChartOperations.downloadXYLineChart(topic);
+
+        verifyImageIsValid(image);
+    }
+
+    @Test
+    public void canDownloadBoxWhisperPlot() throws Exception {
+
+        topicDataPointOperations.addData(topic, new DataPoint(44444, 4.4));
+        topicDataPointOperations.addData(topic, new DataPoint(33333, 3.3));
+
+        byte[] image = topicChartOperations.downloadBoxWhiskerChart(topic);
+
+        verifyImageIsValid(image);
+    }
+
+    @Test
+    public void canDownloadBoxWhisperPlotWhenTopicHasNoDataYet() throws Exception {
+        byte[] image = topicChartOperations.downloadBoxWhiskerChart(topic);
 
         verifyImageIsValid(image);
     }

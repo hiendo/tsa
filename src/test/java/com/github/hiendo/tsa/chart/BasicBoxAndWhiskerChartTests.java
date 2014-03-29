@@ -1,6 +1,5 @@
 package com.github.hiendo.tsa.chart;
 
-import org.jfree.chart.JFreeChart;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 import org.testng.annotations.Test;
 

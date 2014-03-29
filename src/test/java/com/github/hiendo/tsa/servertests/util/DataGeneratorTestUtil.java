@@ -92,6 +92,6 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
     }
 
 
-    // Aggregated CPU stats every 5 hours
-    // http://localhost:9999/api/charts/metricAggregatorInterval?topic=cpu.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&startX=0&interval=18000000
+    // Aggregated CPU stats every 1 hours (default interval)
+    // http://localhost:9999/api/topics/cpu.server1/aggregator/interval?start=0
 }

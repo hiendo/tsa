@@ -86,7 +86,7 @@ public class TopicChartResource {
      * @return Response with jpeg chart image
      */
     @GET
-    @Path("metricAggregatorInterval")
+    @Path("boxwhisker")
     @Produces({"image/jpeg", MediaType.APPLICATION_OCTET_STREAM + "; qs=0.9"}) // Stream used for testing
     public Response getBoxWhiskerMetricAggregatorInterval(@QueryParam(value = "topic") List<String> topics,
             @BeanParam final BoxAndWhisperMetricAggregationIntervalChartOption chartOptions) throws Exception {

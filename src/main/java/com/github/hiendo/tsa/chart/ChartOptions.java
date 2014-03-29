@@ -31,7 +31,8 @@ public class ChartOptions {
     @DefaultValue("1000")
     private int width = 1000;
     @QueryParam("startX")
-    private Double startX = null;
+    @DefaultValue("0")
+    private Double startX = 0.0;
     @QueryParam("endX")
     private Double endX = null;
 

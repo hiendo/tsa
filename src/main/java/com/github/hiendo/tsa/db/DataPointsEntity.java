@@ -6,9 +6,9 @@ import com.github.hiendo.tsa.web.entities.DataPoints;
  *
  */
 public class DataPointsEntity {
-    private String topic = "";
-    private double[] xValues;
-    private double[] yValues;
+    protected String topic = "";
+    protected double[] xValues;
+    protected double[] yValues;
 
     public DataPointsEntity(String topic, double[] xValues, double[] yValues) {
         assert xValues.length == yValues.length;
@@ -47,5 +47,9 @@ public class DataPointsEntity {
 
     public double getLastX() {
         return xValues[size() - 1];
+    }
+
+    public boolean isEmpty() {
+        return size() == 0;
     }
 }
