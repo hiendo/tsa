@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * Server properties such as port number.
  */
-@ConfigurationProperties(name="app.server")
+@ConfigurationProperties(prefix="app.server")
 public class AppServerProperties {
 
     @Range(min = 0, max = 65535)

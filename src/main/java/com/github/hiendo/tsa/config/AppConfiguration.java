@@ -3,7 +3,6 @@ package com.github.hiendo.tsa.config;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.chart.BasicXyLineChart;
-import com.github.hiendo.tsa.netty.GraphiteDataImporterServer;
 import org.apache.catalina.Context;
 import org.apache.tomcat.JarScanner;
 import org.apache.tomcat.JarScannerCallback;
@@ -17,11 +16,10 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
 import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.JpaRepositoriesAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.MongoTemplateAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.jms.JmsTemplateAutoConfiguration;
+import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
 import org.springframework.boot.autoconfigure.mobile.DeviceResolverAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
@@ -55,8 +53,8 @@ import java.util.Set;
 @EnableAutoConfiguration(
         exclude = {RabbitAutoConfiguration.class, AopAutoConfiguration.class, BatchAutoConfiguration.class,
                 JpaRepositoriesAutoConfiguration.class, MongoAutoConfiguration.class,
-                MongoTemplateAutoConfiguration.class, DataSourceAutoConfiguration.class,
-                DataSourceTransactionManagerAutoConfiguration.class, JmsTemplateAutoConfiguration.class,
+                DataSourceAutoConfiguration.class,
+                DataSourceTransactionManagerAutoConfiguration.class, JmsAutoConfiguration.class,
                 JmxAutoConfiguration.class, DeviceResolverAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
                 ReactorAutoConfiguration.class, RedisAutoConfiguration.class, SecurityAutoConfiguration.class,
                 ThymeleafAutoConfiguration.class, EmbeddedServletContainerAutoConfiguration.EmbeddedTomcat.class,
@@ -77,9 +75,9 @@ public class AppConfiguration implements WebSocketConfigurer {
     }
 
     @Bean
-   	public WebSocketHandler testwebsocket() {
-   		return new TextWebSocketHandler();
-   	}
+    public WebSocketHandler testwebsocket() {
+        return new TextWebSocketHandler();
+    }
 
     @Bean
     public EmbeddedServletContainerFactory servletContainer() {
@@ -92,7 +90,7 @@ public class AppConfiguration implements WebSocketConfigurer {
                 context.setJarScanner(new JarScanner() {
                     @Override
                     public void scan(ServletContext context, ClassLoader classloader, JarScannerCallback callback,
-                            Set<String> jarsToSkip) {
+                                     Set<String> jarsToSkip) {
                         // Don't do any tomcat's jar scanning to make startup a little bit faster
                     }
                 });
@@ -103,18 +101,18 @@ public class AppConfiguration implements WebSocketConfigurer {
     }
 
     @Bean
-    public ServletRegistrationBean servletRegistrationBean(){
+    public ServletRegistrationBean servletRegistrationBean() {
         ResourceConfig resourceConfig = new ResourceConfig();
         resourceConfig.packages("com.github.hiendo");
         resourceConfig.register(JacksonFeature.class);
         resourceConfig.property(ServerProperties.TRACING, "ALL");
         //resourceConfig.register(LoggingFilter.class);
         ServletContainer servletContainer = new org.glassfish.jersey.servlet.ServletContainer(resourceConfig);
-        return new ServletRegistrationBean(servletContainer,"/api/*");
+        return new ServletRegistrationBean(servletContainer, "/api/*");
     }
 
     @Bean
-    public Session cassandraSession(){
+    public Session cassandraSession() {
         final Cluster cluster = new Cluster.Builder().addContactPoints("localhost").withPort(9142).build();
         return cluster.connect("tsa");
 
