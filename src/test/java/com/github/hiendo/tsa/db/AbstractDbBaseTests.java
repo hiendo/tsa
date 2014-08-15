@@ -21,16 +21,16 @@ public class AbstractDbBaseTests {
     @BeforeClass
     public void setupDbBeforeClass() throws Exception {
         EmbeddedCassandraServerHelper.startEmbeddedCassandra("embeddedDbTestCassandraConfig.yml");
-        CQLDataLoader dataLoader = new CQLDataLoader("localhost", 9143);
-        dataLoader.load(new ClassPathCQLDataSet("schema.cql"));
+        cluster = new Cluster.Builder().addContactPoints("localhost").withPort(9142).build();
+        session = cluster.connect();
 
-        cluster = new Cluster.Builder().addContactPoints("localhost").withPort(9143).build();
-        session = cluster.connect(keyspace);
+        CQLDataLoader dataLoader = new CQLDataLoader(session);
+        dataLoader.load(new ClassPathCQLDataSet("schema.cql"));
     }
 
     @AfterClass
     public void cleanupDbAfterClass() {
-        cluster.shutdown();
+        cluster.close();
         EmbeddedCassandraServerHelper.cleanEmbeddedCassandra();
     }
 }

@@ -1,6 +1,7 @@
 package com.github.hiendo.tsa.servertests;
 
 import com.codahale.metrics.graphite.Graphite;
+import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.config.AppConfiguration;
 import com.github.hiendo.tsa.config.AppServerProperties;
@@ -47,6 +48,7 @@ public class AbstractServerTests {
 
     protected static Session cassandraSession;
     protected static Graphite graphite;
+    private Cluster cluster;
 
     @BeforeSuite
 	public void startupEmbeddedServer() throws Exception {
@@ -56,7 +58,9 @@ public class AbstractServerTests {
 
         if (RUN_EMBEDDED_SERVER) {
             EmbeddedCassandraServerHelper.startEmbeddedCassandra();
-            CQLDataLoader dataLoader = new CQLDataLoader("localhost", 9142);
+            cluster = new Cluster.Builder().addContactPoints("localhost").withPort(9142).build();
+            Session session = cluster.connect();
+            CQLDataLoader dataLoader = new CQLDataLoader(session);
             dataLoader.load(new ClassPathCQLDataSet("schema.cql"));
 
             Future<ConfigurableApplicationContext> startupFuture = startupServer();
@@ -76,6 +80,10 @@ public class AbstractServerTests {
 
         if (graphite != null) {
             graphite.close();
+        }
+
+        if (cluster != null) {
+            cluster.close();
         }
     }
 

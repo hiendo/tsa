@@ -4,7 +4,7 @@ package com.github.hiendo.tsa.servertests.operations;
 import javax.ws.rs.client.WebTarget;
 
 /**
- * Operations to get static file location against web server
+ * operations to get static file location against web server
  */
 public class StaticFileOperations {
 
