@@ -5,11 +5,7 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.config.AppConfiguration;
 import com.github.hiendo.tsa.config.AppServerProperties;
-import com.github.hiendo.tsa.servertests.operations.MetricsIntervalOperations;
-import com.github.hiendo.tsa.servertests.operations.RestTestOperations;
-import com.github.hiendo.tsa.servertests.operations.StaticFileOperations;
-import com.github.hiendo.tsa.servertests.operations.TopicChartOperations;
-import com.github.hiendo.tsa.servertests.operations.TopicDataPointOperations;
+import com.github.hiendo.tsa.servertests.operations.*;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
@@ -41,7 +37,6 @@ public class AbstractServerTests {
     private AppServerProperties appServerProperties;
 
     protected static StaticFileOperations staticFileOperations;
-    protected static RestTestOperations restTestOperations;
     protected static TopicDataPointOperations topicDataPointOperations;
     protected static TopicChartOperations topicChartOperations;
     protected static MetricsIntervalOperations metricsIntervalOperations;
@@ -51,7 +46,7 @@ public class AbstractServerTests {
     private Cluster cluster;
 
     @BeforeSuite
-	public void startupEmbeddedServer() throws Exception {
+    public void startupEmbeddedServer() throws Exception {
         loadTestProperties();
         WebTarget webTarget = setupClient(appServerProperties.getBaseUrl());
         setupOperationClasses(webTarget);
@@ -73,7 +68,7 @@ public class AbstractServerTests {
     }
 
     @AfterSuite
-	public void shutdownEmbeddedServer() throws Exception {
+    public void shutdownEmbeddedServer() throws Exception {
         if (context != null) {
             context.close();
         }
@@ -97,7 +92,6 @@ public class AbstractServerTests {
 
     private void setupOperationClasses(WebTarget webTarget) throws Exception {
         staticFileOperations = new StaticFileOperations(webTarget);
-        restTestOperations = new RestTestOperations(webTarget);
         topicDataPointOperations = new TopicDataPointOperations(webTarget);
         topicChartOperations = new TopicChartOperations(webTarget);
         metricsIntervalOperations = new MetricsIntervalOperations(webTarget);
