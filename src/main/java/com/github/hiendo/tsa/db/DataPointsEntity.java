@@ -37,6 +37,10 @@ public class DataPointsEntity {
         return topic;
     }
 
+    public double[] getXValues() {
+        return xValues;
+    }
+
     public double[] getYValues() {
         return yValues;
     }

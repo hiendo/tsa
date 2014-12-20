@@ -9,6 +9,9 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
+/**
+ * Used to generate graphs for manual testing.
+ */
 @Test(groups = "util")
 public class DataGeneratorTestUtil extends AbstractServerTests {
 
@@ -19,7 +22,7 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
     public void uploadMultipleDifferentTopics() throws Exception {
         int numPoints = 10000;
 
-        for (int curveNum = 10; curveNum <= 13; curveNum++) {
+        for (int curveNum = 1; curveNum <= 5; curveNum++) {
             for (int i = 0; i < numPoints; i++) {
                 long xValue = i;
                 double yValue = xValue * curveNum;
@@ -37,25 +40,25 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         Random random = new Random();
 
         long now = new Date().getTime();
-        long incrementCount = TimeUnit.DAYS.toMillis(1)/300;
+        long incrementCount = TimeUnit.HOURS.toMillis(1);
         long incrementingTime = now;
 
         for ( int i = 0; i < 50; i++) {
-            incrementingTime +=  incrementCount++;
             double randomValue = 20 + random.nextInt(5) + random.nextDouble();
             graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
         }
 
         for ( int i = 0; i < 150; i++) {
-            incrementingTime +=  incrementCount++;
             double randomValue = 60 + random.nextInt(10) + random.nextDouble();
             graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
         }
 
         for ( int i = 0; i < 100; i++) {
-            incrementingTime +=  incrementCount++;
             double randomValue = 30 + random.nextInt(5) + random.nextDouble();
             graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
         }
     }
 
@@ -68,25 +71,55 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         Random random = new Random();
 
         long now = new Date().getTime();
-        long incrementCount = TimeUnit.DAYS.toMillis(1)/300;
+        long incrementCount = TimeUnit.HOURS.toMillis(1);
         long incrementingTime = now;
 
         for ( int i = 0; i < 150; i++) {
-            incrementingTime +=  incrementCount++;
             double randomValue = 400 + random.nextInt(50) + random.nextDouble();
             graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
         }
 
         for ( int i = 0; i < 50; i++) {
-            incrementingTime +=  incrementCount++;
             double randomValue = 900 + random.nextInt(100) + random.nextDouble();
             graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
         }
 
         for ( int i = 0; i < 100; i++) {
-            incrementingTime +=  incrementCount++;
             double randomValue = 100 + random.nextInt(20) + random.nextDouble();
             graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
+        }
+    }
+
+    /**
+     http://localhost:9999/api/charts/xyline?topic=cpu.server1.large&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=false     */
+    @Test
+    public void uploadLargeFakeCpuData() throws Exception {
+        String topic = "cpu.server1.large";
+        Random random = new Random();
+
+        long now = new Date().getTime();
+        long incrementCount = TimeUnit.SECONDS.toMillis(1);
+        long incrementingTime = now;
+
+        for ( int i = 0; i < TimeUnit.DAYS.toSeconds(1); i++) {
+            double randomValue = 20 + random.nextInt(5) + random.nextDouble();
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
+        }
+
+        for ( int i = 0; i < TimeUnit.DAYS.toSeconds(1); i++) {
+            double randomValue = 60 + random.nextInt(10) + random.nextDouble();
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
+        }
+
+        for ( int i = 0; i < TimeUnit.DAYS.toSeconds(1); i++) {
+            double randomValue = 30 + random.nextInt(5) + random.nextDouble();
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
         }
     }
 
@@ -94,7 +127,6 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
     // Aggregated MEM stats every 1 hours (default interval)
     // http://localhost:9999/api/topics/mem.server1/metrics/interval
 
-    // Box whisker box for CPU stats every 4 hours (default interval)
-    // http://localhost:9999/api/charts/boxwhisker?topic=cpu.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&interval=14400000
-
+    // Box whisker box for CPU stats every 1 day
+    // http://localhost:9999/api/charts/boxwhisker?topic=cpu.server1.large&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&interval=86400000
 }

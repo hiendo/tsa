@@ -26,7 +26,7 @@ public class TimeIntervalDatapointsSplitter {
             return new DataPointsSet(dataPointsEntities);
         }
 
-        start = normalizeStart(dataPointsEntity.getFirstX(), start, interval);
+        start = Math.max(dataPointsEntity.getFirstX(), start);
 
         double nextResetCounter = start + interval;
 
@@ -35,6 +35,10 @@ public class TimeIntervalDatapointsSplitter {
         for (int i = 0; i < dataPointsEntity.size(); i++) {
             double xValue = dataPointsEntity.getX(i);
             double yValue = dataPointsEntity.getY(i);
+            if (xValue < start) {
+                continue;
+            }
+
             if (xValue < nextResetCounter) {
                 xValues.add(xValue);
                 yValues.add(yValue);
@@ -53,26 +57,6 @@ public class TimeIntervalDatapointsSplitter {
         dataPointsEntities.add(new DataPointsEntity(dataPointsEntity.getTopic(), convert(xValues), convert(yValues)));
 
         return new DataPointsSet(dataPointsEntities);
-    }
-
-    /**
-     * Normalize the start value, particularly in the case where start is smaller than first value by more than an
-     * interval.
-     *
-     * In this case, we want to quickly move the start time so it's smaller than the first value by within an interval.
-     *
-     * @param firstValue first value of the data point
-     * @param start data point to start from
-     * @param interval interval to increment each time time data points are split.
-     * @return normalized start value.
-     */
-    private double normalizeStart(double firstValue, double start, double interval) {
-        if (start < firstValue) {
-            double distance = Math.floor((firstValue - start) / interval);
-
-            start = start + (distance * interval);
-        }
-        return start;
     }
 
     private double[] convert(ArrayList<Double> timesToAdd) {
