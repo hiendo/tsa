@@ -13,18 +13,20 @@ import static org.hamcrest.core.Is.is;
 
 // http://www.datastax.com/documentation/developer/java-driver/2.0/java-driver/quick_start/qsSimpleClientAddSession_t.html
 public class AbstractDbBaseTests {
-    protected String keyspace = "tsa";
 
-    protected Session session;
+    protected Session cassandraSession;
     protected Cluster cluster;
 
     @BeforeClass
     public void setupDbBeforeClass() throws Exception {
-        EmbeddedCassandraServerHelper.startEmbeddedCassandra("embeddedDbTestCassandraConfig.yml");
+        /**
+         * @todo: can't use this class since it collides with server tests which brings up DB once in @BeforeSuite
+         */
+        EmbeddedCassandraServerHelper.startEmbeddedCassandra();
         cluster = new Cluster.Builder().addContactPoints("localhost").withPort(9142).build();
-        session = cluster.connect();
+        cassandraSession = cluster.connect();
 
-        CQLDataLoader dataLoader = new CQLDataLoader(session);
+        CQLDataLoader dataLoader = new CQLDataLoader(cassandraSession);
         dataLoader.load(new ClassPathCQLDataSet("schema.cql"));
     }
 
