@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class DataGeneratorTestUtil extends AbstractServerTests {
 
     /**
-     http://localhost:9999/api/charts/xyline?topic=curve10&topic=curve11&topic=curve12&topic=curve13&title=Comparing%20Different%20Topics&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&xAxisAsDate=false&connectPoints=true&startX=4&endX=10000
+         http://localhost:9999/api/charts/xyline?topic=curve10&topic=curve11&topic=curve12&topic=curve13&title=Comparing%20Different%20Topics&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&xAxisAsDate=false&connectPoints=true&startX=4&endX=10000
      */
     @Test
     public void uploadMultipleDifferentTopics() throws Exception {
@@ -43,7 +43,6 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
         for ( int i = 0; i < 50; i++) {
             incrementingTime +=  incrementCount++;
             double randomValue = 20 + random.nextInt(5) + random.nextDouble();
-            topicDataPointOperations.addData(topic, new DataPoint(incrementingTime, randomValue));
             graphite.send(topic, String.valueOf(randomValue), incrementingTime);
         }
 
@@ -92,6 +91,10 @@ public class DataGeneratorTestUtil extends AbstractServerTests {
     }
 
 
-    // Aggregated CPU stats every 1 hours (default interval)
-    // http://localhost:9999/api/topics/cpu.server1/aggregator/interval?start=0
+    // Aggregated MEM stats every 1 hours (default interval)
+    // http://localhost:9999/api/topics/mem.server1/metrics/interval
+
+    // Box whisker box for CPU stats every 4 hours (default interval)
+    // http://localhost:9999/api/charts/boxwhisker?topic=cpu.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&interval=14400000
+
 }

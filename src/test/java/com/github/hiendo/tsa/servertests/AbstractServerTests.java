@@ -30,7 +30,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class AbstractServerTests {
-    private static final boolean RUN_EMBEDDED_SERVER = true;
+    private static final boolean RUN_EMBEDDED_SERVER = false;
 
     protected static ConfigurableApplicationContext context;
 

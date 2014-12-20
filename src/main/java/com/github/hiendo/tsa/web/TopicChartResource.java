@@ -101,7 +101,7 @@ public class TopicChartResource {
             DataPointsEntity dataPointsEntity = dataPointsSet.getDataPoints(dataPointsSetIndex);
             List<Double> values = new ArrayList<Double>();
             for(int dataPointIndex = 0; dataPointIndex < dataPointsEntity.size(); dataPointIndex++) {
-                values.add(dataPointsEntity.getX(dataPointIndex));
+                values.add(dataPointsEntity.getY(dataPointIndex));
             }
 
             String dateRange = chartOptions.getDateFormat().format(new Date((long) dataPointsEntity.getFirstX()))
