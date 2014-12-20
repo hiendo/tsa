@@ -1,5 +1,5 @@
 
-package com.github.hiendo.tsa.servertests.operations2;
+package com.github.hiendo.tsa.servertests.operations;
 
 import javax.ws.rs.client.WebTarget;
 
