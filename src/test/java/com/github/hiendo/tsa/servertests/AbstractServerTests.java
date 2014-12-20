@@ -5,7 +5,7 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.config.AppConfiguration;
 import com.github.hiendo.tsa.config.AppServerProperties;
-import com.github.hiendo.tsa.servertests.operations.*;
+import com.github.hiendo.tsa.servertests.operations2.*;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
@@ -59,7 +59,7 @@ public class AbstractServerTests {
             dataLoader.load(new ClassPathCQLDataSet("schema.cql"));
 
             Future<ConfigurableApplicationContext> startupFuture = startupServer();
-            context = startupFuture.get(30, TimeUnit.SECONDS);
+            context = startupFuture.get(90, TimeUnit.SECONDS);
             cassandraSession = context.getBean(Session.class);
         }
 

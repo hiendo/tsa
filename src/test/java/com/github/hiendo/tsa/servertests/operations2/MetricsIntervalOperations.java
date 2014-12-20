@@ -1,5 +1,5 @@
 
-package com.github.hiendo.tsa.servertests.operations;
+package com.github.hiendo.tsa.servertests.operations2;
 
 import com.github.hiendo.tsa.web.entities.AggregatedStatsSet;
 

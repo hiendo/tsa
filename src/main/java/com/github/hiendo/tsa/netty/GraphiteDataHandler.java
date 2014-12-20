@@ -3,20 +3,20 @@ package com.github.hiendo.tsa.netty;
 
 import com.github.hiendo.tsa.db.DataPointRepository;
 import com.github.hiendo.tsa.web.entities.DataPoint;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.*;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static org.jboss.netty.channel.Channels.fireMessageReceived;
-
 /**
- * Netty handler to save graphite data.
+ *
  */
 @Component
-public class GraphiteDataHandler extends SimpleChannelUpstreamHandler {
+@ChannelHandler.Sharable
+public class GraphiteDataHandler extends ChannelInboundHandlerAdapter {
     private static final String WHITESPACE = "[\\s]+";
 
     final static Logger logger = LoggerFactory.getLogger(GraphiteDataHandler.class);
@@ -29,9 +29,8 @@ public class GraphiteDataHandler extends SimpleChannelUpstreamHandler {
     }
 
     @Override
-    public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
-        String msg = (String) e.getMessage();
-        String[] split = msg.split(WHITESPACE);
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        String[] split = ((String)msg).split(WHITESPACE);
         if (split.length != 3) {
             throw new IllegalArgumentException("Incorrect format: " + msg);
         }
@@ -39,9 +38,14 @@ public class GraphiteDataHandler extends SimpleChannelUpstreamHandler {
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        ctx.flush();
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         // Close the connection when an exception is raised.
-        e.getCause().printStackTrace();
-        e.getChannel().close();
+        logger.warn("Unexpected exception from downstream.", cause);
+        ctx.close();
     }
 }
