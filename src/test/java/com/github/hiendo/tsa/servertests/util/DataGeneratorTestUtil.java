@@ -1,11 +1,17 @@
 package com.github.hiendo.tsa.servertests.util;
 
+import com.codahale.metrics.graphite.Graphite;
+import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.servertests.AbstractServerTests;
 import com.github.hiendo.tsa.web.entities.DataPoint;
-import org.testng.annotations.Test;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.testng.annotations.*;
 
+import javax.ws.rs.client.WebTarget;
+import java.net.InetSocketAddress;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 
@@ -13,7 +19,22 @@ import java.util.concurrent.TimeUnit;
  * Used to generate graphs for manual testing.
  */
 @Test(groups = "util")
-public class DataGeneratorTestUtil extends AbstractServerTests {
+public class DataGeneratorTestUtil {
+
+    private Graphite graphite;
+
+    @BeforeClass(alwaysRun = true)
+    public void startupEmbeddedServer() throws Exception {
+        graphite = new Graphite(new InetSocketAddress("localhost", 2003));
+        graphite.connect();
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void shutdownEmbeddedServer() throws Exception {
+        if (graphite != null) {
+            graphite.close();
+        }
+    }
 
     /**
          http://localhost:9999/api/charts/xyline?topic=curve10&topic=curve11&topic=curve12&topic=curve13&title=Comparing%20Different%20Topics&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&xAxisAsDate=false&connectPoints=true&startX=4&endX=10000

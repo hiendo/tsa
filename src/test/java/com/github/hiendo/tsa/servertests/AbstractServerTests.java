@@ -1,14 +1,13 @@
 package com.github.hiendo.tsa.servertests;
 
 import com.codahale.metrics.graphite.Graphite;
-import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.config.AppConfiguration;
 import com.github.hiendo.tsa.config.AppServerProperties;
-import com.github.hiendo.tsa.servertests.operations.*;
-import org.cassandraunit.CQLDataLoader;
-import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
-import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
+import com.github.hiendo.tsa.servertests.operations.MetricsIntervalOperations;
+import com.github.hiendo.tsa.servertests.operations.StaticFileOperations;
+import com.github.hiendo.tsa.servertests.operations.TopicChartOperations;
+import com.github.hiendo.tsa.servertests.operations.TopicDataPointOperations;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -30,7 +29,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class AbstractServerTests {
-    private static final boolean RUN_EMBEDDED_SERVER = false;
+    protected boolean runEmbeddedServer = true;
 
     protected static ConfigurableApplicationContext context;
 
@@ -43,7 +42,6 @@ public class AbstractServerTests {
 
     protected static Session cassandraSession;
     protected static Graphite graphite;
-    private Cluster cluster;
 
     @BeforeSuite
     public void startupEmbeddedServer() throws Exception {
@@ -51,13 +49,7 @@ public class AbstractServerTests {
         WebTarget webTarget = setupClient(appServerProperties.getBaseUrl());
         setupOperationClasses(webTarget);
 
-        if (RUN_EMBEDDED_SERVER) {
-            EmbeddedCassandraServerHelper.startEmbeddedCassandra();
-            cluster = new Cluster.Builder().addContactPoints("localhost").withPort(9142).build();
-            Session session = cluster.connect();
-            CQLDataLoader dataLoader = new CQLDataLoader(session);
-            dataLoader.load(new ClassPathCQLDataSet("schema.cql"));
-
+        if (runEmbeddedServer) {
             Future<ConfigurableApplicationContext> startupFuture = startupServer();
             context = startupFuture.get(90, TimeUnit.SECONDS);
             cassandraSession = context.getBean(Session.class);
@@ -75,10 +67,6 @@ public class AbstractServerTests {
 
         if (graphite != null) {
             graphite.close();
-        }
-
-        if (cluster != null) {
-            cluster.close();
         }
     }
 

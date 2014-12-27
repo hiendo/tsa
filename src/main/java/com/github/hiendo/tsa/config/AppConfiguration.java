@@ -3,6 +3,7 @@ package com.github.hiendo.tsa.config;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.github.hiendo.tsa.chart.BasicXyLineChart;
+import com.github.hiendo.tsa.db.EmbeddedCassandra;
 import org.apache.catalina.Context;
 import org.apache.tomcat.JarScanner;
 import org.apache.tomcat.JarScannerCallback;
@@ -45,6 +46,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import javax.servlet.ServletContext;
+import java.io.IOException;
 import java.util.Set;
 
 
@@ -59,7 +61,7 @@ import java.util.Set;
                 ReactorAutoConfiguration.class, RedisAutoConfiguration.class, SecurityAutoConfiguration.class,
                 ThymeleafAutoConfiguration.class, EmbeddedServletContainerAutoConfiguration.EmbeddedTomcat.class,
                 EmbeddedServletContainerAutoConfiguration.EmbeddedJetty.class, MultipartAutoConfiguration.class})
-@EnableConfigurationProperties({AppServerProperties.class})
+@EnableConfigurationProperties({AppServerProperties.class, CassandraProperties.class})
 @EnableWebSocket
 public class AppConfiguration implements WebSocketConfigurer {
 
@@ -67,6 +69,9 @@ public class AppConfiguration implements WebSocketConfigurer {
 
     @Autowired
     private AppServerProperties appServerProperties;
+
+    @Autowired
+    private CassandraProperties cassandraProperties;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
@@ -112,10 +117,27 @@ public class AppConfiguration implements WebSocketConfigurer {
     }
 
     @Bean
-    public Session cassandraSession() {
+    public Session cassandraSession() throws IOException {
+        final EmbeddedCassandra embeddedCassandra = new EmbeddedCassandra(cassandraProperties);
+        embeddedCassandra.start();
+        
         final Cluster cluster = new Cluster.Builder().addContactPoints("localhost").withPort(9142).build();
-        return cluster.connect("tsa");
+        final Session session = cluster.connect();
 
-        // @todo cleanup client
+        session.execute("CREATE KEYSPACE IF NOT EXISTS tsa WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}");
+        session.execute("use tsa");
+        session.execute("CREATE TABLE IF NOT EXISTS datapoints (topic text, xValue double, yValue double, PRIMARY KEY(topic, xValue))");
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                cluster.close();
+                session.close();
+                embeddedCassandra.stop();
+
+            }
+        });
+        
+        return session;
     }
 }

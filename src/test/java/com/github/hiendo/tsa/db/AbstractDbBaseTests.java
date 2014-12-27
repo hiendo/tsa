@@ -26,8 +26,8 @@ public class AbstractDbBaseTests {
         cluster = new Cluster.Builder().addContactPoints("localhost").withPort(9142).build();
         cassandraSession = cluster.connect();
 
-        CQLDataLoader dataLoader = new CQLDataLoader(cassandraSession);
-        dataLoader.load(new ClassPathCQLDataSet("schema.cql"));
+//        CQLDataLoader dataLoader = new CQLDataLoader(cassandraSession);
+//        dataLoader.load(new ClassPathCQLDataSet("schema.cql"));
     }
 
     @AfterClass

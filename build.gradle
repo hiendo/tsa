@@ -79,17 +79,22 @@ dependencies {
     compile "org.glassfish.jersey.ext:jersey-spring3:${jerseyServletVersion}"
     compile "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyClientVersion}"
 
-    // Misc
+    // Database
     compile("com.datastax.cassandra:cassandra-driver-core:${cassandraDriverCore}") {
         exclude group: 'com.google.guava', module: 'guava'
     }
-    compile "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
-    compile "joda-time:joda-time:${jodaTimeVersion}"
-    compile "jfree:jfreechart:${jfreeChartVersion}"
-    compile "org.apache.commons:commons-math:${commonsMathVersion}"
-
+    compile "org.apache.cassandra:cassandra-all:${cassandraVersion}"
     compile "com.codahale.metrics:metrics-graphite:${codaHaleMetricsVersion}"
     compile "io.netty:netty-all:${nettyVersion}"
+
+    // Misc
+    compile "joda-time:joda-time:${jodaTimeVersion}"
+    compile "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
+    compile "jfree:jfreechart:${jfreeChartVersion}"
+    compile "org.apache.commons:commons-math:${commonsMathVersion}"
+    compile "commons-io:commons-io:2.4"
+
+
 
     // Testing
     testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
@@ -97,7 +102,6 @@ dependencies {
     testCompile "org.cassandraunit:cassandra-unit:${cassandraUnit}"
     testCompile "org.eclipse.jetty:jetty-client:${jettyClientVersion}"
     testCompile "org.eclipse.jetty.websocket:websocket-client:${jettyClientVersion}"
-    testCompile "org.apache.cassandra:cassandra-all:${cassandraVersion}"
 
     // Jersey
     testCompile "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
