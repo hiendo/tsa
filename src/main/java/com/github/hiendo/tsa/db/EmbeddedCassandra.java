@@ -23,7 +23,7 @@ public class EmbeddedCassandra {
     public synchronized void start() throws IOException {
         System.setProperty("os.name", "unix"); // bug: https://issues.apache.org/jira/browse/CASSANDRA-8452
         File cassandraHome = new File(cassandraProperties.getCassandraHome());
-        if (cassandraProperties.isDeleteData() && cassandraHome.exists() && !FileUtils.deleteQuietly(cassandraHome)) {
+        if (cassandraProperties.isDeleteCassandraHome() && cassandraHome.exists() && !FileUtils.deleteQuietly(cassandraHome)) {
             throw new RuntimeException("Unable to delete cassandra home " + cassandraProperties.getCassandraHome());
         }
 

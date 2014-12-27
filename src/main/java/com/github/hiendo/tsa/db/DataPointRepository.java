@@ -4,17 +4,18 @@ package com.github.hiendo.tsa.db;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
+import com.github.hiendo.tsa.config.CassandraProperties;
 import com.github.hiendo.tsa.web.entities.DataPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.gte;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.lte;
+import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
 
 // @todo: look here to implement shard:
 // http://planetcassandra.org/blog/post/getting-started-with-time-series-data-modeling/
@@ -22,10 +23,12 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.lte;
 public class DataPointRepository {
 
     private Session session;
+    private CassandraProperties cassandraProperties;
 
     @Autowired
-    public DataPointRepository(Session session) {
+    public DataPointRepository(Session session, CassandraProperties cassandraProperties) {
         this.session = session;
+        this.cassandraProperties = cassandraProperties;
     }
 
     /**
@@ -35,9 +38,15 @@ public class DataPointRepository {
      * @param dataPoint data point to save
      */
     public void saveDataPoint(String topic, DataPoint dataPoint) {
-        session.execute(
-                QueryBuilder.insertInto("datapoints").value("topic", topic).value("xValue", dataPoint.getxValue())
-                        .value("yValue", dataPoint.getyValue()));
+        Insert queryStatement = QueryBuilder.insertInto("datapoints").value("topic", topic)
+                .value("xValue", dataPoint.getxValue()).value("yValue", dataPoint.getyValue());
+
+        if (cassandraProperties.getNumberOfDaysToKeepData() != -1) {
+            session.execute(queryStatement);
+        } else {
+            session.execute(queryStatement.using(ttl((int) TimeUnit.DAYS.toSeconds(
+                    cassandraProperties.getNumberOfDaysToKeepData()))));
+        }
     }
 
     /**

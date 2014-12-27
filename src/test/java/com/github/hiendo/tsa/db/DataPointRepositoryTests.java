@@ -1,5 +1,6 @@
 package com.github.hiendo.tsa.db;
 
+import com.github.hiendo.tsa.config.CassandraProperties;
 import com.github.hiendo.tsa.servertests.AbstractServerTests;
 import com.github.hiendo.tsa.web.entities.DataPoint;
 import org.testng.annotations.BeforeClass;
@@ -22,12 +23,11 @@ public class DataPointRepositoryTests extends AbstractServerTests {
 
     @BeforeClass
     public void beforeClass() {
-        dataPointRepository = new DataPointRepository(cassandraSession);
+        dataPointRepository = new DataPointRepository(cassandraSession, new CassandraProperties());
     }
 
     @BeforeMethod
     public void beforeMethod() {
-        dataPointRepository = new DataPointRepository(cassandraSession);
         topic = "topic-" + UUID.randomUUID();
     }
 
