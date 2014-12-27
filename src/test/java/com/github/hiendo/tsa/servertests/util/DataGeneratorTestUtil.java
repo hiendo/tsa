@@ -37,7 +37,7 @@ public class DataGeneratorTestUtil {
     }
 
     /**
-         http://localhost:9999/api/charts/xyline?topic=curve10&topic=curve11&topic=curve12&topic=curve13&title=Comparing%20Different%20Topics&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&xAxisAsDate=false&connectPoints=true&startX=4&endX=10000
+     http://localhost:8888/api/charts/xyline?topic=curve1&topic=curve2&topic=curve3&topic=curve4&topic=curve5&title=Comparing%20Different%20Topics&xAxisLabel=Some%20X%20Values&yAxisLabel=Some%20Metric&xAxisAsDate=false&connectPoints=true&startX=4&endX=10000
      */
     @Test
     public void uploadMultipleDifferentTopics() throws Exception {
@@ -53,7 +53,7 @@ public class DataGeneratorTestUtil {
     }
 
     /**
-     http://localhost:9999/api/charts/xyline?topic=cpu.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
+     http://localhost:8888/api/charts/xyline?topic=cpu.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
      */
     @Test
     public void uploadFakeCpuData() throws Exception {
@@ -84,8 +84,7 @@ public class DataGeneratorTestUtil {
     }
 
     /**
-     http://localhost:9999/api/charts/xyline?topic=mem.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
-     */
+     http://localhost:8888/api/charts/xyline?topic=mem.server1&title=Memory%20for%20Server%201&xAxisLabel=Date&yAxisLabel=Memory%20(MB)&connectPoints=true     */
     @Test
     public void uploadMemData() throws Exception {
         String topic = "mem.server1";
@@ -115,7 +114,8 @@ public class DataGeneratorTestUtil {
     }
 
     /**
-     http://localhost:9999/api/charts/xyline?topic=cpu.server1.large&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=false     */
+     http://localhost:8888/api/charts/xyline?topic=cpu.server1.large&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Load%20(%)&connectPoints=false%20
+     */
     @Test
     public void uploadLargeFakeCpuData() throws Exception {
         String topic = "cpu.server1.large";
@@ -145,9 +145,15 @@ public class DataGeneratorTestUtil {
     }
 
 
-    // Aggregated MEM stats every 1 hours (default interval)
-    // http://localhost:9999/api/topics/mem.server1/metrics/interval
+    // Aggregated cpu stats every hour (default interval)
+    // http://localhost:8888/api/topics/cpu.server1.large/metrics/interval
+
+    // Aggregated cpu stats every min
+    // http://localhost:8888/api/topics/cpu.server1.large/metrics/interval?interval=60000
+
+    // Get all data points for cpu stats
+    // http://localhost:8888/api/topics/cpu.server1.large/datapoints
 
     // Box whisker box for CPU stats every 1 day
-    // http://localhost:9999/api/charts/boxwhisker?topic=cpu.server1.large&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&interval=86400000
+    // http://localhost:8888/api/charts/boxwhisker?topic=cpu.server1.large&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&interval=86400000
 }
