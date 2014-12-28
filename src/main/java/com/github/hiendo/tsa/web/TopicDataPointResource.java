@@ -1,6 +1,7 @@
 package com.github.hiendo.tsa.web;
 
 import com.github.hiendo.tsa.db.DataPointRepository;
+import com.github.hiendo.tsa.db.DataPointsEntity;
 import com.github.hiendo.tsa.web.entities.DataPoint;
 import com.github.hiendo.tsa.web.entities.DataPoints;
 import org.slf4j.Logger;
@@ -51,7 +52,11 @@ public class TopicDataPointResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public DataPoints getDataPoints(@PathParam("topic") String topic, @QueryParam("start") Double startX,
-            @QueryParam("end") Double endX) {
-        return dataPointRepository.getDataPointsForTopic(topic, startX, endX).toApiEntity();
+            @QueryParam("end") Double endX, @QueryParam("timeShiftXValues") Boolean timeShiftXValues) {
+        DataPointsEntity dataPointsForTopic = dataPointRepository.getDataPointsForTopic(topic, startX, endX);
+        if (timeShiftXValues != null && timeShiftXValues) {
+            dataPointsForTopic.timeShiftToFirstXValue();
+        }
+        return dataPointsForTopic.toApiEntity();
 	}
 }

@@ -17,6 +17,10 @@ public class XyChartOptions extends ChartOptions {
     @DefaultValue("false")
     private boolean plotGrowth = false;
 
+    @QueryParam("timeShiftXValues")
+    @DefaultValue("false")
+    private boolean timeShiftXValues = false;
+
     public static XyChartOptions newOptions() {
         return new XyChartOptions();
     }
@@ -27,5 +31,9 @@ public class XyChartOptions extends ChartOptions {
 
     public boolean isPlotGrowth() {
         return plotGrowth;
+    }
+
+    public boolean isTimeShiftXValues() {
+        return timeShiftXValues;
     }
 }

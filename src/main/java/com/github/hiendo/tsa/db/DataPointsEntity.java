@@ -3,7 +3,7 @@ package com.github.hiendo.tsa.db;
 import com.github.hiendo.tsa.web.entities.DataPoints;
 
 /**
- *
+ * Represents a data points for a specific topic.
  */
 public class DataPointsEntity {
     protected String topic = "";
@@ -11,7 +11,9 @@ public class DataPointsEntity {
     protected double[] yValues;
 
     public DataPointsEntity(String topic, double[] xValues, double[] yValues) {
-        assert xValues.length == yValues.length;
+        if (xValues.length != yValues.length) {
+            throw new IllegalArgumentException("Mismatch size of x and y values");
+        }
         this.topic = topic;
         this.xValues = xValues;
         this.yValues = yValues;
@@ -55,5 +57,19 @@ public class DataPointsEntity {
 
     public boolean isEmpty() {
         return size() == 0;
+    }
+
+    public void timeShiftToFirstXValue() {
+        if (isEmpty()) {
+            return;
+        }
+
+        timeFirstAgainstXValue(xValues[0]);
+    }
+
+    public void timeFirstAgainstXValue(double xValue) {
+        for(int i = 0; i < xValues.length; i++) {
+            xValues[i] = xValues[i] - xValue;
+        }
     }
 }
