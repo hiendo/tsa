@@ -97,15 +97,8 @@ public class BasicXyLineChart {
         for (DataPointsEntity dataPointsEntity : dataPointsEntities) {
             XYSeries xySeries = new XYSeries(dataPointsEntity.getTopic());
             xySeriesList.add(xySeries);
-            for (int i = 1; i < dataPointsEntity.size(); i++) {
-                if (chartOptions.isPlotGrowth()) {
-                    double y2 = dataPointsEntity.getY(i);
-                    double y1 = dataPointsEntity.getY(i - 1);
-                    double growth = (y2 - y1) / y1;
-                    xySeries.add(dataPointsEntity.getX(i), growth);
-                } else {
-                    xySeries.add(dataPointsEntity.getX(i), dataPointsEntity.getY(i));
-                }
+            for (int i = 0; i < dataPointsEntity.size(); i++) {
+                xySeries.add(dataPointsEntity.getX(i), dataPointsEntity.getY(i));
             }
         }
 
