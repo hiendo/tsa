@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * Handler to handle request graphite's
  */
 @Component
 @ChannelHandler.Sharable

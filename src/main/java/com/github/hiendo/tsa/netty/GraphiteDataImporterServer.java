@@ -18,17 +18,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
- *
+ * Netty server which simulate graphite's format for data import.
  */
 @Component
 public class GraphiteDataImporterServer {
     private final int port = 2003;
     private GraphiteDataHandler graphiteDataHandler;
+    private EventLoopGroup bossGroup = null;
+    private EventLoopGroup workerGroup = null;
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Autowired
     public GraphiteDataImporterServer(GraphiteDataHandler graphiteDataHandler) {
@@ -37,8 +42,8 @@ public class GraphiteDataImporterServer {
 
     @PostConstruct
     public void run() throws Exception {
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        bossGroup = new NioEventLoopGroup(1);
+        workerGroup = new NioEventLoopGroup();
 
         // @todo shutdown threads above
 
@@ -57,13 +62,28 @@ public class GraphiteDataImporterServer {
 
         final ChannelFuture channelFuture = serverBootstrap.bind(port).sync();
 
-        Future<Void> future =
-                Executors.newSingleThreadExecutor().submit(new Callable<Void>() {
-                    @Override
-                    public Void call() throws Exception {
-                        channelFuture.channel().closeFuture().sync();
-                        return null;
-                    }
-                });
+//        Future<Void> future =
+//                executorService.submit(new Callable<Void>() {
+//                    @Override
+//                    public Void call() throws Exception {
+//                        channelFuture.channel().closeFuture().sync();
+//                        return null;
+//                    }
+//                });
+    }
+
+    @PreDestroy
+    public void stop() throws Exception {
+        if (bossGroup != null) {
+            bossGroup.shutdownGracefully();
+        }
+
+        if (workerGroup != null) {
+            workerGroup.shutdownGracefully();
+        }
+
+        if (executorService != null) {
+            executorService.shutdown();
+        }
     }
 }
