@@ -63,10 +63,6 @@ public class TopicChartResource {
                     .getDataPointsForTopic(topic, xyChartOptions.getStartX(), xyChartOptions.getEndX()));
         }
 
-        if (xyChartOptions.isTimeShiftXValues()) {
-            timeShiftXValuesToSmallestFirstXValue(dataPointsEntities);
-        }
-
         final BasicXyLineChart basicXyPlot = new BasicXyLineChart(xyChartOptions);
 
         StreamingOutput stream = new StreamingOutput() {
@@ -82,17 +78,6 @@ public class TopicChartResource {
         return Response.ok(stream).build();
 	}
 
-    private void timeShiftXValuesToSmallestFirstXValue(List<DataPointsEntity> dataPointsEntities) {
-        double smallestX = Double.MAX_VALUE;
-        for(DataPointsEntity dataPointsEntity : dataPointsEntities) {
-            smallestX = Math.min(dataPointsEntity.getFirstX(), smallestX);
-        }
-
-        for(DataPointsEntity dataPointsEntity : dataPointsEntities) {
-            dataPointsEntity.timeFirstAgainstXValue(smallestX);
-        }
-
-    }
 
     /**
      * Get a set of box and whisker charts where each item is stats aggregated metrics by some time interval.
