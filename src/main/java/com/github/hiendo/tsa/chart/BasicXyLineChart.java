@@ -101,12 +101,18 @@ public class BasicXyLineChart {
         for (DataPointsEntity dataPointsEntity : dataPointsEntities) {
             XYSeries xySeries = new XYSeries(dataPointsEntity.getTopic());
             xySeriesList.add(xySeries);
-            for (int i = 0; i < dataPointsEntity.size(); i++) {
-                if (chartOptions.isxAxisAsDate()) {
-                    // Convert time from seconds to milliseconds
-                    xySeries.add(dataPointsEntity.getX(i)*1000, dataPointsEntity.getY(i));
+
+            if (chartOptions.isxAxisAsDate()) {
+                // Convert time from seconds to milliseconds
+                for (int i = 0; i < dataPointsEntity.size(); i++) {
+                    xySeries.add(dataPointsEntity.getX(i) * 1000, dataPointsEntity.getY(i));
+                }
+            } else {
+                for (int i = 0; i < dataPointsEntity.size(); i++) {
+                    xySeries.add(dataPointsEntity.getX(i), dataPointsEntity.getY(i));
                 }
             }
+
         }
 
         try {
