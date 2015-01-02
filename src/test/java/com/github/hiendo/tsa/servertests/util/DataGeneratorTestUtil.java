@@ -9,6 +9,7 @@ import org.testng.annotations.*;
 
 import javax.ws.rs.client.WebTarget;
 import java.net.InetSocketAddress;
+import java.sql.Time;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.Future;
@@ -54,14 +55,15 @@ public class DataGeneratorTestUtil {
 
     /**
      http://localhost:8888/api/charts/xyline?topic=cpu.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
+     http://localhost:8888/api/charts/xyline?topic=cpu.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&
      */
     @Test
     public void uploadFakeCpuData() throws Exception {
         String topic = "cpu.server1";
         Random random = new Random();
 
-        long now = new Date().getTime();
-        long incrementCount = TimeUnit.HOURS.toMillis(1);
+        long now = TimeUnit.MILLISECONDS.toSeconds(new Date().getTime());
+        long incrementCount = TimeUnit.SECONDS.toSeconds(1);
         long incrementingTime = now;
 
         for ( int i = 0; i < 50; i++) {
@@ -90,8 +92,8 @@ public class DataGeneratorTestUtil {
         String topic = "mem.server1";
         Random random = new Random();
 
-        long now = new Date().getTime();
-        long incrementCount = TimeUnit.HOURS.toMillis(1);
+        long now = TimeUnit.MILLISECONDS.toSeconds(new Date().getTime());
+        long incrementCount = TimeUnit.MINUTES.toSeconds(1);
         long incrementingTime = now;
 
         for ( int i = 0; i < 150; i++) {
@@ -118,11 +120,11 @@ public class DataGeneratorTestUtil {
      */
     @Test
     public void uploadLargeFakeCpuData() throws Exception {
-        String topic = "cpu.server1.large";
+        String topic = "cpu.server2.large";
         Random random = new Random();
 
-        long now = new Date().getTime();
-        long incrementCount = TimeUnit.SECONDS.toMillis(1);
+        long now = TimeUnit.MILLISECONDS.toSeconds(new Date().getTime());
+        long incrementCount = TimeUnit.SECONDS.toSeconds(1);
         long incrementingTime = now;
 
         for ( int i = 0; i < TimeUnit.DAYS.toSeconds(1); i++) {

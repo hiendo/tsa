@@ -5,6 +5,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.DateTickUnit;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Draws basic XY line chart.
@@ -78,6 +80,8 @@ public class BasicXyLineChart {
         if (chartOptions.isxAxisAsDate()) {
             DateAxis dateAxis = new DateAxis(chartOptions.getxAxisLabel());
             dateAxis.setDateFormatOverride(chartOptions.getDateFormat());
+            //dateAxis.setTickUnit(new DateTickUnit(DateTickUnit.SECOND, 30));
+            dateAxis.setVerticalTickLabels(true);
             plot.setDomainAxis(dateAxis);
         }
 
@@ -98,7 +102,10 @@ public class BasicXyLineChart {
             XYSeries xySeries = new XYSeries(dataPointsEntity.getTopic());
             xySeriesList.add(xySeries);
             for (int i = 0; i < dataPointsEntity.size(); i++) {
-                xySeries.add(dataPointsEntity.getX(i), dataPointsEntity.getY(i));
+                if (chartOptions.isxAxisAsDate()) {
+                    // Convert time from seconds to milliseconds
+                    xySeries.add(dataPointsEntity.getX(i)*1000, dataPointsEntity.getY(i));
+                }
             }
         }
 

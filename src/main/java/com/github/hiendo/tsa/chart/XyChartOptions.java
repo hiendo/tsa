@@ -13,10 +13,6 @@ public class XyChartOptions extends ChartOptions {
     @DefaultValue("true")
     private boolean connectPoints = true;
 
-    @QueryParam("timeShiftXValues")
-    @DefaultValue("false")
-    private boolean timeShiftXValues = false;
-
     public static XyChartOptions newOptions() {
         return new XyChartOptions();
     }
@@ -25,7 +21,4 @@ public class XyChartOptions extends ChartOptions {
         return connectPoints;
     }
 
-    public boolean isTimeShiftXValues() {
-        return timeShiftXValues;
-    }
 }
