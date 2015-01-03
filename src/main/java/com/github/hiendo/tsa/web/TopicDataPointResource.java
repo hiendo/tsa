@@ -52,11 +52,8 @@ public class TopicDataPointResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public DataPoints getDataPoints(@PathParam("topic") String topic, @QueryParam("start") Double startX,
-            @QueryParam("end") Double endX, @QueryParam("timeShiftXValues") Boolean timeShiftXValues) {
+            @QueryParam("end") Double endX) {
         DataPointsEntity dataPointsForTopic = dataPointRepository.getDataPointsForTopic(topic, startX, endX);
-        if (timeShiftXValues != null && timeShiftXValues) {
-            dataPointsForTopic.timeShiftToFirstXValue();
-        }
         return dataPointsForTopic.toApiEntity();
 	}
 }

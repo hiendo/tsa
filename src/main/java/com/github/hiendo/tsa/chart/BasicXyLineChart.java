@@ -5,22 +5,21 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.DateTickUnit;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.Range;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.Color;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Draws basic XY line chart.
@@ -77,21 +76,59 @@ public class BasicXyLineChart {
         }
         plot.setRenderer(renderer);
 
+        long smallestX =
+                chartOptions.getStartX() == null ? getSmallestXInDataset(dataset) :
+                        Math.round(chartOptions.getStartX());
+        long largestX = chartOptions.getEndX() == null ? getLargestXInDataset(dataset) : Math.round(
+                chartOptions.getEndX());
+
+        // case where there are zero data.
+        smallestX = Math.min(smallestX, 0);
+        largestX = Math.max(largestX, 0);
+
         if (chartOptions.isxAxisAsDate()) {
             DateAxis dateAxis = new DateAxis(chartOptions.getxAxisLabel());
             dateAxis.setDateFormatOverride(chartOptions.getDateFormat());
-            //dateAxis.setTickUnit(new DateTickUnit(DateTickUnit.SECOND, 30));
             dateAxis.setVerticalTickLabels(true);
+
+            dateAxis.setMinimumDate(new Date(smallestX));
+            dateAxis.setMaximumDate(new Date(largestX));
             plot.setDomainAxis(dateAxis);
+        } else {
+            org.jfree.chart.axis.NumberAxis numberAxis = (org.jfree.chart.axis.NumberAxis) plot.getDomainAxis();
+            numberAxis.setRange(new Range(smallestX, largestX));
         }
 
         return chart;
     }
 
+
+    private long getSmallestXInDataset(XYDataset dataset) {
+        long smallestX = Long.MAX_VALUE;
+        for (int i = 0; i < dataset.getSeriesCount(); i++) {
+            if (dataset.getItemCount(i) > 0) {
+                smallestX = Math.min(Math.round((double) dataset.getX(i, 0)), smallestX);
+            }
+        }
+
+        return smallestX;
+    }
+
+    private long getLargestXInDataset(XYDataset dataset) {
+        long largestX = Long.MIN_VALUE;
+        for (int i = 0; i < dataset.getSeriesCount(); i++) {
+            if (dataset.getItemCount(i) > 0) {
+                largestX = Math.max(Math.round((double) dataset.getX(i, dataset.getItemCount(i) - 1)), largestX);
+            }
+        }
+
+        return largestX;
+    }
+
     /**
      * Create a chart and write out data to stream.
      *
-     * @param outputStream output stream to write chart to
+     * @param outputStream       output stream to write chart to
      * @param dataPointsEntities set of DataPoints to graph
      */
     public void writeChart(OutputStream outputStream, DataPointsEntity... dataPointsEntities) {
@@ -102,17 +139,17 @@ public class BasicXyLineChart {
             XYSeries xySeries = new XYSeries(dataPointsEntity.getTopic());
             xySeriesList.add(xySeries);
 
+            int multiplier = 1;
             if (chartOptions.isxAxisAsDate()) {
                 // Convert time from seconds to milliseconds
-                for (int i = 0; i < dataPointsEntity.size(); i++) {
-                    xySeries.add(dataPointsEntity.getX(i) * 1000, dataPointsEntity.getY(i));
-                }
-            } else {
-                for (int i = 0; i < dataPointsEntity.size(); i++) {
-                    xySeries.add(dataPointsEntity.getX(i), dataPointsEntity.getY(i));
+                if (chartOptions.getTimeUnit().equals("sec")) {
+                    multiplier = 1000;
                 }
             }
 
+            for (int i = 0; i < dataPointsEntity.size(); i++) {
+                xySeries.add(dataPointsEntity.getX(i) * multiplier, dataPointsEntity.getY(i));
+            }
         }
 
         try {
@@ -121,7 +158,8 @@ public class BasicXyLineChart {
 
             logger.info("Chart creation generation took " + (writeChartStart - startCreateChart) / 1000.0);
 
-            ChartUtilities.writeChartAsJPEG(outputStream, jFreeChart, chartOptions.getWidth(), chartOptions.getHeight());
+            ChartUtilities
+                    .writeChartAsJPEG(outputStream, jFreeChart, chartOptions.getWidth(), chartOptions.getHeight());
 
             logger.info("Chart writing took " + (System.currentTimeMillis() - writeChartStart) / 1000.0);
         } catch (IOException e) {

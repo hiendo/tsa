@@ -21,6 +21,9 @@ public class ChartOptions {
     @QueryParam("xAxisAsDate")
     @DefaultValue("true")
     private boolean xAxisAsDate = false;
+    @QueryParam("timeUnit")
+    @DefaultValue("ms")
+    private String timeUnit = "ms";
     @QueryParam("dateFormat")
     @DefaultValue("MM/dd-HH:mm")
     private SimpleDateFormat dateFormat = DEFAULT_DATE_FORMAT;
@@ -31,8 +34,7 @@ public class ChartOptions {
     @DefaultValue("1000")
     private int width = 1000;
     @QueryParam("startX")
-    @DefaultValue("0")
-    private Double startX = 0.0;
+    private Double startX = null;
     @QueryParam("endX")
     private Double endX = null;
 
@@ -70,5 +72,9 @@ public class ChartOptions {
 
     public Double getStartX() {
         return startX;
+    }
+
+    public String getTimeUnit() {
+        return timeUnit;
     }
 }

@@ -49,8 +49,8 @@ public class MetricsIntervalResource {
     @Path("interval")
     @Produces(MediaType.APPLICATION_JSON)
     public AggregatedStatsSet getAggregatedStatsSetByInterval(@PathParam("topic") String topic,
-            @QueryParam("start") @DefaultValue("0") Double startX, @QueryParam("end") Double endX,
-            @QueryParam("interval") @DefaultValue("3600000") Double interval) {
+            @QueryParam("start") Double startX, @QueryParam("end") Double endX,
+            @QueryParam("interval") @DefaultValue("3600000") Long interval) {
         DataPointsEntity allDatapoints = dataPointRepository.getDataPointsForTopic(topic, startX, endX);
         DataPointsSet dataPointsSet =
                 timeIntervalDatapointsSplitter.splitDatapoints(allDatapoints, startX, interval);
