@@ -36,7 +36,7 @@ public class DataPointRepositoryTests extends AbstractServerTests {
     public void canInsertDataPoint() throws Exception {
         dataPointRepository.saveDataPoint(topic, new DataPoint(2, 2.2));
         dataPointRepository.saveDataPoint(topic, new DataPoint(3, 3.3));
-        dataPointRepository.saveDataPoint(topic, new DataPoint(1, 1.1));
+        dataPointRepository.saveDataPoint(topic, 1, 1.1);
 
         DataPointsEntity dataPoints = dataPointRepository.getAllDataPointsForTopic(topic);
 

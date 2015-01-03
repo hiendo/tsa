@@ -34,7 +34,7 @@ public class GraphiteDataHandler extends SimpleChannelInboundHandler<String> {
         if (split.length != 3) {
             throw new IllegalArgumentException("Incorrect format: " + msg);
         }
-        dataPointRepository.saveDataPoint(split[0], new DataPoint(Double.valueOf(split[2]), Double.valueOf(split[1])));
+        dataPointRepository.saveDataPoint(split[0], Double.valueOf(split[2]), Double.valueOf(split[1]));
     }
 
     @Override

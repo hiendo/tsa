@@ -24,11 +24,13 @@ public class DataPointRepository {
 
     private Session session;
     private CassandraProperties cassandraProperties;
+    int numberOfDaysToKeepData;
 
     @Autowired
     public DataPointRepository(Session session, CassandraProperties cassandraProperties) {
         this.session = session;
         this.cassandraProperties = cassandraProperties;
+        this.numberOfDaysToKeepData = cassandraProperties.getNumberOfDaysToKeepData();
     }
 
     /**
@@ -38,16 +40,28 @@ public class DataPointRepository {
      * @param dataPoint data point to save
      */
     public void saveDataPoint(String topic, DataPoint dataPoint) {
-        Insert queryStatement = QueryBuilder.insertInto("datapoints").value("topic", topic)
-                .value("xValue", dataPoint.getxValue()).value("yValue", dataPoint.getyValue());
+        saveDataPoint(topic, dataPoint.getxValue(), dataPoint.getyValue());
+    }
 
-        if (cassandraProperties.getNumberOfDaysToKeepData() != -1) {
+    /**
+     * Save the data point for the specified topic.
+     *
+     * @param topic topic to save data point for
+     * @param xValue x value to save
+     * @param yValue y value to save
+     */
+    public void saveDataPoint(String topic, double xValue, double yValue) {
+        Insert queryStatement = QueryBuilder.insertInto("datapoints").value("topic", topic)
+                .value("xValue", xValue).value("yValue", yValue);
+
+        if (numberOfDaysToKeepData != -1) {
             session.execute(queryStatement);
         } else {
             session.execute(queryStatement.using(ttl((int) TimeUnit.DAYS.toSeconds(
                     cassandraProperties.getNumberOfDaysToKeepData()))));
         }
     }
+
 
     /**
      * Get all data points for the range.
