@@ -68,7 +68,11 @@ public class MetricsIntervalResource {
                     .add(new AggregatedStats(dataPoints.getFirstX(), dataPoints.getLastX(), dataPoints.size(),
                             descriptiveStatistics.getSum(), descriptiveStatistics.getMean(),
                             descriptiveStatistics.getMean(), descriptiveStatistics.getMin(),
-                            descriptiveStatistics.getMax()));
+                            descriptiveStatistics.getMax(), descriptiveStatistics.getStandardDeviation(),
+                            descriptiveStatistics.getPercentile(10),
+                            descriptiveStatistics.getPercentile(90)));
+
+
         }
 
         return new AggregatedStatsSet(aggregatedStatsList);

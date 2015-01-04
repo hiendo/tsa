@@ -16,13 +16,16 @@ public class AggregatedStats {
     private double median;
     private double min;
     private double max;
+    private double standardDeviation;
+    private double percentile10;
+    private double percentile90;
     private double sum;
 
     // Json serialization
     private AggregatedStats(){}
 
     public AggregatedStats(double startX, double endX, int numberOfDataPoints, double sum, double mean, double median, double min,
-            double max) {
+            double max, double standardDeviation, double percentile10, double percentile90) {
         this.startX = startX;
         this.endX = endX;
         this.numberOfDataPoints = numberOfDataPoints;
@@ -31,6 +34,9 @@ public class AggregatedStats {
         this.median = median;
         this.min = min;
         this.max = max;
+        this.standardDeviation = standardDeviation;
+        this.percentile10 = percentile10;
+        this.percentile90 = percentile90;
     }
 
     public double getStartX() {
@@ -63,5 +69,17 @@ public class AggregatedStats {
 
     public double getSum() {
         return sum;
+    }
+
+    public double getStandardDeviation() {
+        return standardDeviation;
+    }
+
+    public double getPercentile10() {
+        return percentile10;
+    }
+
+    public double getPercentile90() {
+        return percentile90;
     }
 }
