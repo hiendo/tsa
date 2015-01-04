@@ -1,6 +1,5 @@
 package com.github.hiendo.tsa.chart;
 
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 import java.util.concurrent.TimeUnit;
 
@@ -10,10 +9,12 @@ import java.util.concurrent.TimeUnit;
 public class BoxAndWhisperMetricAggregationIntervalChartOption extends ChartOptions {
 
     @QueryParam("interval")
-    @DefaultValue("3600000") // 1 hour
-    private long interval = TimeUnit.HOURS.toMillis(1);
+    private Double interval = Double.MAX_VALUE;
 
-    public long getInterval() {
+    public double getInterval() {
+        if (interval == null) {
+            return Double.MAX_VALUE;
+        }
         return interval;
     }
 }

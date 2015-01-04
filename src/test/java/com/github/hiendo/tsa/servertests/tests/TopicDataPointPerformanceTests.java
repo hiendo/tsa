@@ -19,10 +19,12 @@ public class TopicDataPointPerformanceTests extends AbstractServerTests {
     private static int NUM_POINTS = 500;
 
     private String topic;
+    private GraphiteImportedTestHelper graphiteImportedTestHelper;
 
     @BeforeMethod(alwaysRun = true)
     public void beforeMethod() {
         topic = "topic-" + UUID.randomUUID();
+        graphiteImportedTestHelper = new GraphiteImportedTestHelper(topicDataPointOperations);
     }
 
     @Test
@@ -33,25 +35,9 @@ public class TopicDataPointPerformanceTests extends AbstractServerTests {
         }
         System.out.println("http: " + (System.currentTimeMillis() - now) / 1000.0);
 
-        verifyTopicHasCorrectPoints();
-
+        graphiteImportedTestHelper.verifyTopicNumberOfPoints(topic, NUM_POINTS);
     }
 
-    private void verifyTopicHasCorrectPoints() throws InterruptedException {
-        long time = 0;
-        while (true) {
-            DataPoints dataPoints = topicDataPointOperations.getDataForTopic(topic);
-            if (dataPoints.size() == NUM_POINTS) {
-                break;
-            }
-
-            Thread.sleep(200);
-            time += 200;
-            if (time > 2000) {
-                fail("Timed out waiting for points.  Total points: " + dataPoints.size());
-            }
-        }
-    }
 
     @Test
     public void canSendManyPointsUsingGraphite() throws Exception {
@@ -63,6 +49,6 @@ public class TopicDataPointPerformanceTests extends AbstractServerTests {
 
         System.out.println("graphite: " + (System.currentTimeMillis() - now) / 1000.0);
 
-        verifyTopicHasCorrectPoints();
+        graphiteImportedTestHelper.verifyTopicNumberOfPoints(topic, NUM_POINTS);
     }
 }

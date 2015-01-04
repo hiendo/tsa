@@ -22,7 +22,7 @@ public class TimeIntervalDatapointsSplitterTests {
                         new double[]{1, 41, 121, 141, 161, 201, 211, 221, 231});
 
         DataPointsSet timeIntervalDataPointsSplitterResult =
-                timeIntervalDatapointsSplitter.splitDatapoints(dataPointsEntity, 0.0, 100l);
+                timeIntervalDatapointsSplitter.splitDatapoints(dataPointsEntity, 0.0, 100.0);
 
         assertThat("stats set", timeIntervalDataPointsSplitterResult, notNullValue());
         assertThat("stats set size", timeIntervalDataPointsSplitterResult.getSize(), is(3));
@@ -40,7 +40,7 @@ public class TimeIntervalDatapointsSplitterTests {
                         new double[]{1, 41, 121, 141, 161, 201, 211, 221, 231});
 
         DataPointsSet timeIntervalDataPointsSplitterResult =
-                timeIntervalDatapointsSplitter.splitDatapoints(dataPointsEntity, -10000.0, 100l);
+                timeIntervalDatapointsSplitter.splitDatapoints(dataPointsEntity, -10000.0, 100.0);
 
         assertThat("stats set", timeIntervalDataPointsSplitterResult, notNullValue());
         assertThat("stats set size", timeIntervalDataPointsSplitterResult.getSize(), is(3));
@@ -58,7 +58,7 @@ public class TimeIntervalDatapointsSplitterTests {
                         new double[]{1, 41, 121, 141, 161, 201, 211, 221, 231});
 
         DataPointsSet timeIntervalDataPointsSplitterResult =
-                timeIntervalDatapointsSplitter.splitDatapoints(dataPointsEntity, -1.0, 100l);
+                timeIntervalDatapointsSplitter.splitDatapoints(dataPointsEntity, -1.0, 100.0);
 
         assertThat("stats set", timeIntervalDataPointsSplitterResult, notNullValue());
         assertThat("stats set size", timeIntervalDataPointsSplitterResult.getSize(), is(3));
@@ -69,7 +69,7 @@ public class TimeIntervalDatapointsSplitterTests {
 
     @Test
     public void canAggregateStatsInTimeWhenStartValueIsInMiddleOfRange() throws IOException {
-        long interval = 100;
+        double interval = 100.0;
         TimeIntervalDatapointsSplitter timeIntervalDatapointsSplitter = new TimeIntervalDatapointsSplitter();
 
         DataPointsEntity dataPointsEntity =
@@ -98,7 +98,7 @@ public class TimeIntervalDatapointsSplitterTests {
         DataPointsEntity dataPointsEntity = new DataPointsEntity("topic", new double[]{}, new double[]{});
 
         DataPointsSet timeIntervalDataPointsSplitterResult =
-                timeIntervalDatapointsSplitter.splitDatapoints(dataPointsEntity, 0.0, 100l);
+                timeIntervalDatapointsSplitter.splitDatapoints(dataPointsEntity, 0.0, 100.0);
 
         assertThat("stats set", timeIntervalDataPointsSplitterResult, notNullValue());
         assertThat("stats set size", timeIntervalDataPointsSplitterResult.getSize(), is(0));

@@ -51,8 +51,8 @@ public class TopicDataPointResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public DataPoints getDataPoints(@PathParam("topic") String topic, @QueryParam("start") Double startX,
-            @QueryParam("end") Double endX) {
+    public DataPoints getDataPoints(@PathParam("topic") String topic, @QueryParam("startX") Double startX,
+            @QueryParam("endX") Double endX) {
         DataPointsEntity dataPointsForTopic = dataPointRepository.getDataPointsForTopic(topic, startX, endX);
         return dataPointsForTopic.toApiEntity();
 	}

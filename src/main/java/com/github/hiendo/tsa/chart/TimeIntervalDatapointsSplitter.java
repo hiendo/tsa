@@ -20,7 +20,8 @@ public class TimeIntervalDatapointsSplitter {
      * @param interval interval between the DataPoints in the set
      * @return set of DataPoints
      */
-    public DataPointsSet splitDatapoints(DataPointsEntity dataPointsEntity, Double start, Long interval) {
+    public DataPointsSet splitDatapoints(DataPointsEntity dataPointsEntity, Double start, Double interval) {
+
         List<DataPointsEntity> dataPointsEntities = new ArrayList<>();
         if (dataPointsEntity.isEmpty()) {
             return new DataPointsSet(dataPointsEntities);
@@ -31,6 +32,10 @@ public class TimeIntervalDatapointsSplitter {
         }
 
         start = Math.max(dataPointsEntity.getFirstX(), start);
+
+        if (interval == null) {
+            interval = Double.MAX_VALUE;
+        }
 
         double nextResetCounter = start + interval;
 

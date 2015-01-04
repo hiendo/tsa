@@ -25,8 +25,10 @@ public class GraphiteDataImporterServerTests extends AbstractServerTests {
         graphite.send(topic, "33333", 33);
         graphite.send(topic, "55555", 55);
 
-        DataPoints dataPoints = topicDataPointOperations.getDataForTopic(topic);
 
+        new GraphiteImportedTestHelper(topicDataPointOperations).verifyTopicNumberOfPoints(topic, 3);
+
+        DataPoints dataPoints = topicDataPointOperations.getDataForTopic(topic);
         assertThat("Data points", dataPoints, notNullValue());
         assertThat("Data points size", dataPoints.size(), equalTo(3));
         assertThat("Data points time", dataPoints.getY(0), closeTo(33, .01));

@@ -15,7 +15,7 @@ public class MetricsIntervalOperations {
 
     public AggregatedStatsSet aggregateMetricByTimeInterval(String topic, double start, long interval) {
         return webTarget.path("/api/topics/" + topic + "/metrics/interval").queryParam("interval", interval)
-                .queryParam("start", start).request()
+                .queryParam("startX", start).request()
                 .get(AggregatedStatsSet.class);
     }
 }
