@@ -8,7 +8,7 @@ Time Series App with subset featues similar to the graphite tool (http://graphit
 ./gradlew clean build
 
 # Run the application.  A sample client to run is located in DataGeneratorTestUtil.
-java -jar build/libs/tsa-1.0.0-SNAPSHOT-exec.jar
+java -server -Xms128m -Xmx512m -XX:PermSize=128m -XX:MaxPermSize=128m -jar build/libs/tsa-1.0.0-SNAPSHOT-exec.jar
 
 # Startup the server within IDE for testing
 com.github.hiendo.tsa.DevAppMain

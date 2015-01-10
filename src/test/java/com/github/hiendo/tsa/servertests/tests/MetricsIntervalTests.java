@@ -45,18 +45,21 @@ public class MetricsIntervalTests extends AbstractServerTests {
         assertThat("Data points", aggregatedStatsSet, notNullValue());
         assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(3));
 
-        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(0).getStartX(), closeTo(0.0, .01));
-        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(0).getEndX(), closeTo(10, .01));
+        assertThat("Data points topic", aggregatedStatsSet.getAggregatedStats(0).getTopic(), is(topic));
+        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(0).getStartTime(), is(0l));
+        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(0).getEndTime(), is(10l));
         assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(0).getNumberOfDataPoints(), is(2));
         assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(0).getMax(), closeTo(5, .01));
 
-        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(1).getStartX(), closeTo(100, .01));
-        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(1).getEndX(), closeTo(190, .01));
+        assertThat("Data points topic", aggregatedStatsSet.getAggregatedStats(1).getTopic(), is(topic));
+        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(1).getStartTime(), is(100l));
+        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(1).getEndTime(), is(190l));
         assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(1).getNumberOfDataPoints(), is(3));
         assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(1).getMax(), closeTo(19, .01));
 
-        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(2).getStartX(), closeTo(220, .01));
-        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(2).getEndX(), closeTo(280, .01));
+        assertThat("Data points topic", aggregatedStatsSet.getAggregatedStats(2).getTopic(), is(topic));
+        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(2).getStartTime(), is(220l));
+        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(2).getEndTime(), is(280l));
         assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(2).getNumberOfDataPoints(), is(4));
         assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(2).getMax(), closeTo(280, .01));
     }
@@ -95,13 +98,15 @@ public class MetricsIntervalTests extends AbstractServerTests {
         assertThat("Data points", aggregatedStatsSet, notNullValue());
         assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(2));
 
-        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(0).getStartX(), closeTo(100, .01));
-        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(0).getEndX(), closeTo(190, .01));
+        assertThat("Data points topic", aggregatedStatsSet.getAggregatedStats(0).getTopic(), is(topic));
+        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(0).getStartTime(), is(100l));
+        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(0).getEndTime(), is(190l));
         assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(0).getNumberOfDataPoints(), is(3));
         assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(0).getMax(), closeTo(19, .01));
 
-        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(1).getStartX(), closeTo(220, .01));
-        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(1).getEndX(), closeTo(280, .01));
+        assertThat("Data points topic", aggregatedStatsSet.getAggregatedStats(1).getTopic(), is(topic));
+        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(1).getStartTime(), is(220l));
+        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(1).getEndTime(), is(280l));
         assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(1).getNumberOfDataPoints(), is(4));
         assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(1).getMax(), closeTo(280, .01));
     }

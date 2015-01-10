@@ -1,19 +1,14 @@
 package com.github.hiendo.tsa.servertests.util;
 
 import com.codahale.metrics.graphite.Graphite;
-import com.datastax.driver.core.Session;
-import com.github.hiendo.tsa.servertests.AbstractServerTests;
-import com.github.hiendo.tsa.web.entities.DataPoint;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.testng.annotations.*;
 
-import javax.ws.rs.client.WebTarget;
 import java.net.InetSocketAddress;
-import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 
 /**
@@ -22,17 +17,28 @@ import java.util.concurrent.TimeUnit;
 @Test(groups = "util")
 public class DataGeneratorTestUtil {
 
+    private ExecutorService executorService;
+    private List<Graphite> graphiteClients = new ArrayList<>();
     private Graphite graphite;
 
     @BeforeClass(alwaysRun = true)
     public void startupEmbeddedServer() throws Exception {
-        graphite = new Graphite(new InetSocketAddress("localhost", 2003));
-        graphite.connect();
+        executorService = Executors.newFixedThreadPool(5);
+        for (int i = 0; i < 5; i++) {
+            Graphite graphite = new Graphite(new InetSocketAddress("localhost", 2003));
+            graphiteClients.add(graphite);
+            graphite.connect();
+        }
+        graphite = graphiteClients.get(0);
     }
 
     @AfterClass(alwaysRun = true)
     public void shutdownEmbeddedServer() throws Exception {
-        if (graphite != null) {
+        if (executorService != null) {
+            executorService.shutdown();
+        }
+
+        for (Graphite graphite : graphiteClients) {
             graphite.close();
         }
     }
@@ -120,30 +126,50 @@ public class DataGeneratorTestUtil {
      */
     @Test
     public void uploadLargeFakeCpuData() throws Exception {
-        String topic = "cpu.server2.large";
-        Random random = new Random();
+        final String topic = "cpu.server1.large";
+        final Random random = new Random();
 
-        long now = TimeUnit.MILLISECONDS.toSeconds(new Date().getTime());
-        long incrementCount = TimeUnit.SECONDS.toSeconds(1);
-        long incrementingTime = now;
+        final long now = TimeUnit.MILLISECONDS.toSeconds(new Date().getTime());
+        final long secondIncrement = 1;
 
-        for ( int i = 0; i < TimeUnit.DAYS.toSeconds(1); i++) {
-            double randomValue = 20 + random.nextInt(5) + random.nextDouble();
-            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
-            incrementingTime +=  incrementCount;
-        }
+        final long endDay1 = now + TimeUnit.DAYS.toSeconds(1);
+        Future<Void> future1 = executorService.submit(new Callable<Void>() {
+            @Override public Void call() throws Exception {
 
-        for ( int i = 0; i < TimeUnit.DAYS.toSeconds(1); i++) {
-            double randomValue = 60 + random.nextInt(10) + random.nextDouble();
-            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
-            incrementingTime +=  incrementCount;
-        }
+                for ( long time = now; time < endDay1; time += secondIncrement) {
+                    double randomValue = 20 + random.nextInt(5) + random.nextDouble();
+                    graphiteClients.get(0).send(topic, String.valueOf(randomValue), time);
+                }
+                return null;
+            }
+        });
 
-        for ( int i = 0; i < TimeUnit.DAYS.toSeconds(1); i++) {
-            double randomValue = 30 + random.nextInt(5) + random.nextDouble();
-            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
-            incrementingTime +=  incrementCount;
-        }
+        final long endDay2 = endDay1 + TimeUnit.DAYS.toSeconds(1);
+        Future<Void> future2 = executorService.submit(new Callable<Void>() {
+            @Override public Void call() throws Exception {
+
+                for ( long time = endDay1; time < endDay2; time += secondIncrement) {
+                    double randomValue = 60 + random.nextInt(10) + random.nextDouble();
+                    graphiteClients.get(1).send(topic, String.valueOf(randomValue), time);
+                }
+                return null;
+            }
+        });
+
+        final long endDay3 = endDay2 + TimeUnit.DAYS.toSeconds(1);
+        Future<Void> future3 = executorService.submit(new Callable<Void>() {
+            @Override public Void call() throws Exception {
+                for (long time = endDay2; time < endDay3; time += secondIncrement) {
+                    double randomValue = 30 + random.nextInt(5) + random.nextDouble();
+                    graphiteClients.get(2).send(topic, String.valueOf(randomValue), time);
+                }
+                return null;
+            }
+        });
+
+        future1.get();
+        future2.get();
+        future3.get();
     }
 
 

@@ -94,8 +94,6 @@ dependencies {
     compile "org.apache.commons:commons-math:${commonsMathVersion}"
     compile "commons-io:commons-io:2.4"
 
-
-
     // Testing
     testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
     testCompile "org.testng:testng:${testNgVersion}"
@@ -116,6 +114,9 @@ test {
     }
     include(["**/*Tests.class", "**/*Test.class"])
     exclude(["**/Abstract*.class", '**/*$*'])
+    // set heap size for the test JVM(s)
+    minHeapSize = "128m"
+    maxHeapSize = "512m"
 }
 
 bootRepackage {

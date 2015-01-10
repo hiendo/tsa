@@ -7,69 +7,55 @@ import com.github.hiendo.tsa.web.entities.DataPoints;
  */
 public class DataPointsEntity {
     protected String topic = "";
-    protected double[] xValues;
-    protected double[] yValues;
+    protected long[] timestamps;
+    protected double[] values;
 
-    public DataPointsEntity(String topic, double[] xValues, double[] yValues) {
-        if (xValues.length != yValues.length) {
+    public DataPointsEntity(String topic, long[] timestamps, double[] values) {
+        if (timestamps.length != values.length) {
             throw new IllegalArgumentException("Mismatch size of x and y values");
         }
         this.topic = topic;
-        this.xValues = xValues;
-        this.yValues = yValues;
+        this.timestamps = timestamps;
+        this.values = values;
     }
 
     public int size() {
-        return xValues.length;
+        return timestamps.length;
     }
 
-    public double getY(int index) {
-        return yValues[index];
+    public double getValue(int index) {
+        return values[index];
     }
 
-    public double getX(int index) {
-        return xValues[index];
+    public long getTimestamp(int index) {
+        return timestamps[index];
     }
 
     public DataPoints toApiEntity() {
-        return new DataPoints(xValues, yValues);
+        return new DataPoints(timestamps, values);
     }
 
     public String getTopic() {
         return topic;
     }
 
-    public double[] getXValues() {
-        return xValues;
+    public long[] getTimestamps() {
+        return timestamps;
     }
 
-    public double[] getYValues() {
-        return yValues;
+    public double[] getValues() {
+        return values;
     }
 
-    public double getFirstX() {
-        return xValues[0];
+    public long getFirstTimestamp() {
+        return timestamps[0];
     }
 
-    public double getLastX() {
-        return xValues[size() - 1];
+    public long getLastTimestamp() {
+        return timestamps[size() - 1];
     }
 
     public boolean isEmpty() {
         return size() == 0;
-    }
-
-    public void timeShiftToFirstXValue() {
-        if (isEmpty()) {
-            return;
-        }
-
-        timeFirstAgainstXValue(xValues[0]);
-    }
-
-    public void timeFirstAgainstXValue(double xValue) {
-        for(int i = 0; i < xValues.length; i++) {
-            xValues[i] = xValues[i] - xValue;
-        }
     }
 }

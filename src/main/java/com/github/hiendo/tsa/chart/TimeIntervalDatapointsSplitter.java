@@ -16,59 +16,69 @@ public class TimeIntervalDatapointsSplitter {
      * Split up DataPoints to a set of DataPoints separated by the specified interval.
      *
      * @param dataPointsEntity datapoints so split
-     * @param start start point of the interval
+     * @param startTime start point of the interval
      * @param interval interval between the DataPoints in the set
      * @return set of DataPoints
      */
-    public DataPointsSet splitDatapoints(DataPointsEntity dataPointsEntity, Double start, Double interval) {
+    public DataPointsSet splitDatapoints(DataPointsEntity dataPointsEntity, Long startTime, Double interval) {
 
         List<DataPointsEntity> dataPointsEntities = new ArrayList<>();
         if (dataPointsEntity.isEmpty()) {
             return new DataPointsSet(dataPointsEntities);
         }
 
-        if (start == null) {
-            start = Double.MIN_VALUE;
+        if (startTime == null) {
+            startTime = Long.MIN_VALUE;
         }
 
-        start = Math.max(dataPointsEntity.getFirstX(), start);
+        startTime = Math.max(dataPointsEntity.getFirstTimestamp(), startTime);
 
         if (interval == null) {
             interval = Double.MAX_VALUE;
         }
 
-        double nextResetCounter = start + interval;
+        double nextResetCounter = startTime + interval;
 
-        ArrayList<Double> xValues = new ArrayList<>();
-        ArrayList<Double> yValues = new ArrayList<>();
+        ArrayList<Long> timestamps = new ArrayList<>();
+        ArrayList<Double> values = new ArrayList<>();
         for (int i = 0; i < dataPointsEntity.size(); i++) {
-            double xValue = dataPointsEntity.getX(i);
-            double yValue = dataPointsEntity.getY(i);
-            if (xValue < start) {
+            long timestamp = dataPointsEntity.getTimestamp(i);
+            double value = dataPointsEntity.getValue(i);
+            if (timestamp < startTime) {
                 continue;
             }
 
-            if (xValue < nextResetCounter) {
-                xValues.add(xValue);
-                yValues.add(yValue);
+            if (timestamp < nextResetCounter) {
+                timestamps.add(timestamp);
+                values.add(value);
             } else {
-                dataPointsEntities.add(new DataPointsEntity(dataPointsEntity.getTopic(), convert(xValues),
-                        convert(yValues)));
-                xValues = new ArrayList<>();
-                yValues = new ArrayList<>();
+                dataPointsEntities.add(new DataPointsEntity(dataPointsEntity.getTopic(), convertTimestamps(timestamps),
+                        convertValues(values)));
+                timestamps = new ArrayList<>();
+                values = new ArrayList<>();
 
-                xValues.add(xValue);
-                yValues.add(yValue);
+                timestamps.add(timestamp);
+                values.add(value);
                 nextResetCounter = nextResetCounter + interval;
             }
         }
 
-        dataPointsEntities.add(new DataPointsEntity(dataPointsEntity.getTopic(), convert(xValues), convert(yValues)));
+        dataPointsEntities.add(new DataPointsEntity(dataPointsEntity.getTopic(), convertTimestamps(timestamps),
+                convertValues(values)));
 
         return new DataPointsSet(dataPointsEntities);
     }
 
-    private double[] convert(ArrayList<Double> timesToAdd) {
+    private long[] convertTimestamps(ArrayList<Long> timesToAdd) {
+        long[] values =  new long[timesToAdd.size()];
+        for(int i = 0; i < timesToAdd.size(); i++) {
+            values[i] = timesToAdd.get(i);
+        }
+
+        return values;
+    }
+
+    private double[] convertValues(ArrayList<Double> timesToAdd) {
         double[] values =  new double[timesToAdd.size()];
         for(int i = 0; i < timesToAdd.size(); i++) {
             values[i] = timesToAdd.get(i);

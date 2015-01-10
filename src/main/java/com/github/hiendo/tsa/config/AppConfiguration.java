@@ -57,7 +57,7 @@ import java.util.Set;
                 JpaRepositoriesAutoConfiguration.class, MongoAutoConfiguration.class,
                 DataSourceAutoConfiguration.class,
                 DataSourceTransactionManagerAutoConfiguration.class, JmsAutoConfiguration.class,
-                JmxAutoConfiguration.class, DeviceResolverAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
+                DeviceResolverAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
                 ReactorAutoConfiguration.class, RedisAutoConfiguration.class, SecurityAutoConfiguration.class,
                 ThymeleafAutoConfiguration.class, EmbeddedServletContainerAutoConfiguration.EmbeddedTomcat.class,
                 EmbeddedServletContainerAutoConfiguration.EmbeddedJetty.class, MultipartAutoConfiguration.class})
@@ -126,7 +126,7 @@ public class AppConfiguration implements WebSocketConfigurer {
 
         session.execute("CREATE KEYSPACE IF NOT EXISTS tsa WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}");
         session.execute("use tsa");
-        session.execute("CREATE TABLE IF NOT EXISTS datapoints (topic text, xValue double, yValue double, PRIMARY KEY(topic, xValue))");
+        session.execute("CREATE TABLE IF NOT EXISTS datapoints (topic text, timestamp timeuuid, value double, PRIMARY KEY(topic, timestamp))");
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override

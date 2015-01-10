@@ -98,11 +98,11 @@ public class TopicChartResource {
             DataPointsEntity dataPointsEntity = dataPointsSet.getDataPoints(dataPointsSetIndex);
             List<Double> values = new ArrayList<Double>();
             for(int dataPointIndex = 0; dataPointIndex < dataPointsEntity.size(); dataPointIndex++) {
-                values.add(dataPointsEntity.getY(dataPointIndex));
+                values.add(dataPointsEntity.getValue(dataPointIndex));
             }
 
-            String dateRange = chartOptions.getDateFormat().format(new Date((long) dataPointsEntity.getFirstX()))
-            +" to " + chartOptions.getDateFormat().format(new Date((long) dataPointsEntity.getLastX()));
+            String dateRange = chartOptions.getDateFormat().format(new Date((long) dataPointsEntity.getFirstTimestamp()))
+            +" to " + chartOptions.getDateFormat().format(new Date((long) dataPointsEntity.getLastTimestamp()));
 
             dataset.add(values, dateRange, dateRange);
         }

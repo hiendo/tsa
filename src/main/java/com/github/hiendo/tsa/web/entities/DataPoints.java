@@ -4,42 +4,42 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- *
+ * List of timestamps and data value associated with it.
  */
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE,
         isGetterVisibility= JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class DataPoints {
-    private double[] xValues;
-    private double[] yValues;
+    private long[] timeStamps;
+    private double[] values;
 
     // Json serialization
     private DataPoints(){}
 
-    public DataPoints(double[] xValues, double[] yValues) {
-        assert xValues.length == yValues.length;
-        this.xValues = xValues;
-        this.yValues = yValues;
+    public DataPoints(long[] timeStamps, double[] values) {
+        assert timeStamps.length == values.length;
+        this.timeStamps = timeStamps;
+        this.values = values;
     }
 
     public int size() {
-        return xValues.length;
+        return timeStamps.length;
     }
 
     @JsonIgnore
-    public double getX(int index) {
-        return yValues[index];
+    public long getTimestamp(int index) {
+        return timeStamps[index];
     }
 
     @JsonIgnore
-    public double getY(int index) {
-        return xValues[index];
+    public double getValue(int index) {
+        return values[index];
     }
 
-    public double[] getxValues() {
-        return xValues;
+    public long[] getTimeStamps() {
+        return timeStamps;
     }
 
-    public double[] getyValues() {
-        return yValues;
+    public double[] getValues() {
+        return values;
     }
 }

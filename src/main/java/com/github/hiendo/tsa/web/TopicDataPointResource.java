@@ -45,15 +45,15 @@ public class TopicDataPointResource {
      * Get all data points of the specified topic between a certain x value range.
      *
      * @param topic topic to get points for
-     * @param startX start x range; null means to get all points up to end x range
-     * @param endX end x range; null means to get all points from start x range to infinity
+     * @param startTime start time range; null means to get all points up to end x range
+     * @param endTime end time range; null means to get all points from start x range to infinity
      * @return all data points of topic in the range
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public DataPoints getDataPoints(@PathParam("topic") String topic, @QueryParam("startX") Double startX,
-            @QueryParam("endX") Double endX) {
-        DataPointsEntity dataPointsForTopic = dataPointRepository.getDataPointsForTopic(topic, startX, endX);
+    public DataPoints getDataPoints(@PathParam("topic") String topic, @QueryParam("start") Long startTime,
+            @QueryParam("end") Long endTime) {
+        DataPointsEntity dataPointsForTopic = dataPointRepository.getDataPointsForTopic(topic, startTime, endTime);
         return dataPointsForTopic.toApiEntity();
 	}
 }

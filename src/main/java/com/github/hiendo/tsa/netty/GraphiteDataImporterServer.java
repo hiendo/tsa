@@ -45,8 +45,6 @@ public class GraphiteDataImporterServer {
         bossGroup = new NioEventLoopGroup(1);
         workerGroup = new NioEventLoopGroup();
 
-        // @todo shutdown threads above
-
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 100).handler(new LoggingHandler(LogLevel.INFO))
@@ -60,16 +58,7 @@ public class GraphiteDataImporterServer {
                     }
                 });
 
-        final ChannelFuture channelFuture = serverBootstrap.bind(port).sync();
-
-//        Future<Void> future =
-//                executorService.submit(new Callable<Void>() {
-//                    @Override
-//                    public Void call() throws Exception {
-//                        channelFuture.channel().closeFuture().sync();
-//                        return null;
-//                    }
-//                });
+        serverBootstrap.bind(port).sync();
     }
 
     @PreDestroy

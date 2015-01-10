@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -41,31 +40,32 @@ public class MetricsIntervalResource {
      *
      * @param topic topic to get stats for
      * @param interval interval to aggregate the stats for
-     * @param startX start position of the x value
-     * @param endX end position of the x value
+     * @param startTime start position of the x value
+     * @param endTime end position of the x value
      * @return set of aggregate stats
      */
     @GET
     @Path("interval")
     @Produces(MediaType.APPLICATION_JSON)
     public AggregatedStatsSet getAggregatedStatsSetByInterval(@PathParam("topic") String topic,
-            @QueryParam("startX") Double startX, @QueryParam("endX") Double endX,
+            @QueryParam("start") Long startTime, @QueryParam("end") Long endTime,
             @QueryParam("interval") Double interval) {
         if (interval == null) {
             interval = Double.MAX_VALUE;
         }
 
-        DataPointsEntity allDatapoints = dataPointRepository.getDataPointsForTopic(topic, startX, endX);
+        DataPointsEntity allDatapoints = dataPointRepository.getDataPointsForTopic(topic, startTime, endTime);
         DataPointsSet dataPointsSet =
-                timeIntervalDatapointsSplitter.splitDatapoints(allDatapoints, startX, interval);
+                timeIntervalDatapointsSplitter.splitDatapoints(allDatapoints, startTime, interval);
 
         List<AggregatedStats> aggregatedStatsList = new ArrayList<>();
         for (int i = 0; i < dataPointsSet.getSize(); i++) {
             DataPointsEntity dataPoints = dataPointsSet.getDataPoints(i);
 
-            DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics(dataPoints.getYValues());
+            DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics(dataPoints.getValues());
             aggregatedStatsList
-                    .add(new AggregatedStats(dataPoints.getFirstX(), dataPoints.getLastX(), dataPoints.size(),
+                    .add(new AggregatedStats(topic, dataPoints.getFirstTimestamp(), dataPoints.getLastTimestamp(),
+                            dataPoints.size(),
                             descriptiveStatistics.getSum(), descriptiveStatistics.getMean(),
                             descriptiveStatistics.getMean(), descriptiveStatistics.getMin(),
                             descriptiveStatistics.getMax(), descriptiveStatistics.getStandardDeviation(),

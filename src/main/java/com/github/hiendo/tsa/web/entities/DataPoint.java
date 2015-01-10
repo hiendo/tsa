@@ -9,23 +9,23 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
         isGetterVisibility= JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class DataPoint {
 
-    private double xValue;
+    private long timestamp;
 
-    private double yValue;
+    private double value;
 
     // Json serialization
     private DataPoint(){}
 
-    public DataPoint(double xValue, double yValue) {
-        this.xValue = xValue;
-        this.yValue = yValue;
+    public DataPoint(long timestamp, double value) {
+        this.timestamp = timestamp;
+        this.value = value;
     }
 
-    public double getxValue() {
-        return xValue;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public double getyValue() {
-        return yValue;
+    public double getValue() {
+        return value;
     }
 }

@@ -9,8 +9,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
         isGetterVisibility= JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class AggregatedStats {
 
-    double startX;
-    double endX;
+    private String topic;
+    long startTime;
+    long endTime;
     int numberOfDataPoints;
     private double mean;
     private double median;
@@ -24,10 +25,11 @@ public class AggregatedStats {
     // Json serialization
     private AggregatedStats(){}
 
-    public AggregatedStats(double startX, double endX, int numberOfDataPoints, double sum, double mean, double median, double min,
+    public AggregatedStats(String topic, long startTime, long endTime, int numberOfDataPoints, double sum, double mean, double median, double min,
             double max, double standardDeviation, double percentile10, double percentile90) {
-        this.startX = startX;
-        this.endX = endX;
+        this.topic = topic;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.numberOfDataPoints = numberOfDataPoints;
         this.sum = sum;
         this.mean = mean;
@@ -39,12 +41,16 @@ public class AggregatedStats {
         this.percentile90 = percentile90;
     }
 
-    public double getStartX() {
-        return startX;
+    public String getTopic() {
+        return topic;
     }
 
-    public double getEndX() {
-        return endX;
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
     }
 
     public int getNumberOfDataPoints() {

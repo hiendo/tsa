@@ -1,6 +1,7 @@
 
 package com.github.hiendo.tsa.netty;
 
+import com.datastax.driver.core.ResultSetFuture;
 import com.github.hiendo.tsa.db.DataPointRepository;
 import com.github.hiendo.tsa.web.entities.DataPoint;
 import io.netty.channel.ChannelHandler;
@@ -34,7 +35,9 @@ public class GraphiteDataHandler extends SimpleChannelInboundHandler<String> {
         if (split.length != 3) {
             throw new IllegalArgumentException("Incorrect format: " + msg);
         }
-        dataPointRepository.saveDataPoint(split[0], Double.valueOf(split[2]), Double.valueOf(split[1]));
+        ResultSetFuture resultSetFuture =
+                dataPointRepository.saveDataPointAsync(split[0], Long.valueOf(split[2]), Double.valueOf(split[1]));
+        // @todo: what should we do about this failure?
     }
 
     @Override

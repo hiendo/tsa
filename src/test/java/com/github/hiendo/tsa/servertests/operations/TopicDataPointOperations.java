@@ -1,4 +1,3 @@
-
 package com.github.hiendo.tsa.servertests.operations;
 
 import com.github.hiendo.tsa.web.entities.DataPoint;
@@ -23,8 +22,8 @@ public class TopicDataPointOperations {
         return webTarget.path("/api/topics/" + topic + "/datapoints").request().get(DataPoints.class);
     }
 
-    public DataPoints getDataForTopicInRange(String topic, double start, double end) {
-        return webTarget.path("/api/topics/" + topic + "/datapoints").queryParam("startX", start).queryParam("endX", end)
-                .request().get(DataPoints.class);
+    public DataPoints getDataForTopicInRange(String topic, long start, long end) {
+        return webTarget.path("/api/topics/" + topic + "/datapoints").queryParam("start", start).queryParam(
+                "end", end).request().get(DataPoints.class);
     }
 }

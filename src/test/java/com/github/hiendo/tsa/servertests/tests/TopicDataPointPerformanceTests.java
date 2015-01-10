@@ -29,11 +29,9 @@ public class TopicDataPointPerformanceTests extends AbstractServerTests {
 
     @Test
     public void canSendManyPointsUsingHttp() throws Exception {
-        long now = System.currentTimeMillis();
         for (int i = 0; i < NUM_POINTS; i++) {
             topicDataPointOperations.addData(topic, new DataPoint(i, 4.4));
         }
-        System.out.println("http: " + (System.currentTimeMillis() - now) / 1000.0);
 
         graphiteImportedTestHelper.verifyTopicNumberOfPoints(topic, NUM_POINTS);
     }
@@ -41,13 +39,9 @@ public class TopicDataPointPerformanceTests extends AbstractServerTests {
 
     @Test
     public void canSendManyPointsUsingGraphite() throws Exception {
-        long now = System.currentTimeMillis();
-
         for (int i = 0; i < NUM_POINTS; i++) {
             graphite.send(topic, "44444", i);
         }
-
-        System.out.println("graphite: " + (System.currentTimeMillis() - now) / 1000.0);
 
         graphiteImportedTestHelper.verifyTopicNumberOfPoints(topic, NUM_POINTS);
     }

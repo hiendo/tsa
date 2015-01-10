@@ -34,9 +34,9 @@ public class ChartOptions {
     @DefaultValue("1000")
     private int width = 1000;
     @QueryParam("startX")
-    private Double startX = null;
+    private Long startX = null;
     @QueryParam("endX")
-    private Double endX = null;
+    private Long endX = null;
 
     public boolean isxAxisAsDate() {
         return xAxisAsDate;
@@ -66,11 +66,11 @@ public class ChartOptions {
         return width;
     }
 
-    public Double getEndX() {
+    public Long getEndX() {
         return endX;
     }
 
-    public Double getStartX() {
+    public Long getStartX() {
         return startX;
     }
 
