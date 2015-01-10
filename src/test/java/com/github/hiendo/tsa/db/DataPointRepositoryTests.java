@@ -88,8 +88,7 @@ public class DataPointRepositoryTests extends AbstractServerTests {
     }
 
     @Test
-    public void canInsertLotsOfDuplicatedTimstamps() throws Exception {
-        String topic = UUID.randomUUID().toString();
+    public void canInsertLotsOfDuplicatedTimestamps() throws Exception {
         int numPoints = 200;
 
         for (int i = 0; i < numPoints; i++) {

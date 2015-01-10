@@ -55,7 +55,7 @@ public class TopicChartResource {
         final List<DataPointsEntity> dataPointsEntities = new ArrayList<>();
         for(String topic : topics) {
             DataPointsEntity dataPointsEntity = dataPointRepository
-                    .getDataPointsForTopic(topic, xyChartOptions.getStartX(), xyChartOptions.getEndX());
+                    .getDataPointsForTopic(topic, xyChartOptions.getStart(), xyChartOptions.getEnd());
             dataPointsEntities.add(dataPointsEntity);
         }
 
@@ -89,9 +89,9 @@ public class TopicChartResource {
             @BeanParam final BoxAndWhisperMetricAggregationIntervalChartOption chartOptions) throws Exception {
 
         DataPointsEntity dataPoints = dataPointRepository
-                .getDataPointsForTopic(topics.get(0), chartOptions.getStartX(), chartOptions.getEndX());
+                .getDataPointsForTopic(topics.get(0), chartOptions.getStart(), chartOptions.getEnd());
         final DataPointsSet dataPointsSet = timeIntervalDatapointsSplitter
-                .splitDatapoints(dataPoints, chartOptions.getStartX(), chartOptions.getInterval());
+                .splitDatapoints(dataPoints, chartOptions.getStart(), chartOptions.getInterval());
 
         final DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
         for (int dataPointsSetIndex = 0; dataPointsSetIndex < dataPointsSet.getSize(); dataPointsSetIndex++ ) {

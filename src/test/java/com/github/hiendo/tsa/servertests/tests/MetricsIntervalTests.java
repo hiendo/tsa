@@ -38,9 +38,24 @@ public class MetricsIntervalTests extends AbstractServerTests {
     }
 
     @Test
-    public void canAggregateStats() throws Exception {
+    public void canAggregateTopicInTimeRange() throws Exception {
         AggregatedStatsSet aggregatedStatsSet =
-                metricsIntervalOperations.aggregateMetricByTimeInterval(topic, 0, 100);
+                metricsIntervalOperations.aggregateTopicInTimeRange(topic, 11, 219);
+
+        assertThat("Data points", aggregatedStatsSet, notNullValue());
+        assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(1));
+        assertThat("Data points topic", aggregatedStatsSet.getAggregatedStats(0).getTopic(), is(topic));
+        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(0).getStartTime(), is(100l));
+        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(0).getEndTime(), is(190l));
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(0).getNumberOfDataPoints(), is(3));
+        assertThat("Data points min", aggregatedStatsSet.getAggregatedStats(0).getMin(), closeTo(10, .01));
+        assertThat("Data points max", aggregatedStatsSet.getAggregatedStats(0).getMax(), closeTo(19, .01));
+    }
+
+    @Test
+    public void canAggregateStatsByTimeInterval() throws Exception {
+        AggregatedStatsSet aggregatedStatsSet =
+                metricsIntervalOperations.aggregateTopicByTimeInterval(topic, 0, 100);
 
         assertThat("Data points", aggregatedStatsSet, notNullValue());
         assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(3));
@@ -65,9 +80,23 @@ public class MetricsIntervalTests extends AbstractServerTests {
     }
 
     @Test
+    public void canAggregateStatsForAllTime() throws Exception {
+        AggregatedStatsSet aggregatedStatsSet =
+                metricsIntervalOperations.aggregateTopicForAllTime(topic);
+
+        assertThat("Data points", aggregatedStatsSet, notNullValue());
+        assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(1));
+        assertThat("Data points topic", aggregatedStatsSet.getAggregatedStats(0).getTopic(), is(topic));
+        assertThat("Data points start", aggregatedStatsSet.getAggregatedStats(0).getStartTime(), is(0l));
+        assertThat("Data points end", aggregatedStatsSet.getAggregatedStats(0).getEndTime(), is(280l));
+        assertThat("Data points num", aggregatedStatsSet.getAggregatedStats(0).getNumberOfDataPoints(), is(9));
+    }
+
+
+    @Test
     public void canAggregateStatsWhenStartIsLowerThanFirstValueByMoreThanInterval() throws Exception {
         AggregatedStatsSet aggregatedStatsSet =
-                metricsIntervalOperations.aggregateMetricByTimeInterval(topic, -1000000, 100);
+                metricsIntervalOperations.aggregateTopicByTimeInterval(topic, -1000000, 100);
 
         assertThat("Data points", aggregatedStatsSet, notNullValue());
         assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(3));
@@ -80,7 +109,7 @@ public class MetricsIntervalTests extends AbstractServerTests {
     @Test
     public void canAggregateStatsWhenStartIsLowerThanFirstValueWithinAnInterval() throws Exception {
         AggregatedStatsSet aggregatedStatsSet =
-                metricsIntervalOperations.aggregateMetricByTimeInterval(topic, -5, 100);
+                metricsIntervalOperations.aggregateTopicByTimeInterval(topic, -5, 100);
 
         assertThat("Data points", aggregatedStatsSet, notNullValue());
         assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(3));
@@ -93,7 +122,7 @@ public class MetricsIntervalTests extends AbstractServerTests {
     @Test
     public void canAggregateStatsWithStartGreaterThanFirstValue() throws Exception {
         AggregatedStatsSet aggregatedStatsSet =
-                metricsIntervalOperations.aggregateMetricByTimeInterval(topic, 100, 100);
+                metricsIntervalOperations.aggregateTopicByTimeInterval(topic, 100, 100);
 
         assertThat("Data points", aggregatedStatsSet, notNullValue());
         assertThat("Data points set size", aggregatedStatsSet.size(), equalTo(2));

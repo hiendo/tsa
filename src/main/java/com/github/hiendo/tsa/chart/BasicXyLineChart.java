@@ -77,12 +77,12 @@ public class BasicXyLineChart {
         plot.setRenderer(renderer);
 
         // case where time unit is sec so we need to convert min/max time axis to ms
-        Long smallestX = chartOptions.getStartX() == null ? null :  chartOptions.getStartX();
+        Long smallestX = chartOptions.getStart() == null ? null :  chartOptions.getStart();
         if (smallestX != null && chartOptions.isxAxisAsDate() && chartOptions.getTimeUnit().equals("sec")) {
             smallestX = smallestX * 1000;
         }
 
-        Long largestX = chartOptions.getEndX() == null ? null :  chartOptions.getEndX();
+        Long largestX = chartOptions.getEnd() == null ? null :  chartOptions.getEnd();
         if (largestX != null && chartOptions.isxAxisAsDate() && chartOptions.getTimeUnit().equals("sec")) {
             largestX = largestX * 1000;
         }

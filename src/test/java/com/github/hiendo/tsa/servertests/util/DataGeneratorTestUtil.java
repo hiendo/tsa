@@ -1,6 +1,7 @@
 package com.github.hiendo.tsa.servertests.util;
 
 import com.codahale.metrics.graphite.Graphite;
+import com.github.hiendo.tsa.servertests.tests.GraphiteImportedTestHelper;
 import org.testng.annotations.*;
 
 import java.net.InetSocketAddress;
@@ -17,12 +18,12 @@ import java.util.concurrent.*;
 @Test(groups = "util")
 public class DataGeneratorTestUtil {
 
-    private ExecutorService executorService;
+    private ExecutorService executorService = Executors.newFixedThreadPool(5);;
     private List<Graphite> graphiteClients = new ArrayList<>();
     private Graphite graphite;
 
     @BeforeClass(alwaysRun = true)
-    public void startupEmbeddedServer() throws Exception {
+    public void setup() throws Exception {
         executorService = Executors.newFixedThreadPool(5);
         for (int i = 0; i < 5; i++) {
             Graphite graphite = new Graphite(new InetSocketAddress("localhost", 2003));
@@ -33,7 +34,7 @@ public class DataGeneratorTestUtil {
     }
 
     @AfterClass(alwaysRun = true)
-    public void shutdownEmbeddedServer() throws Exception {
+    public void cleanup() throws Exception {
         if (executorService != null) {
             executorService.shutdown();
         }
@@ -122,7 +123,7 @@ public class DataGeneratorTestUtil {
     }
 
     /**
-     http://localhost:8888/api/charts/xyline?topic=cpu.server1.large&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Load%20(%)&connectPoints=false%20
+     http://localhost:8888/api/charts/xyline?topic=cpu.server1.large&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Load%20(%)&connectPoints=false
      */
     @Test
     public void uploadLargeFakeCpuData() throws Exception {
@@ -176,8 +177,8 @@ public class DataGeneratorTestUtil {
     // Aggregated cpu stats every hour (default interval)
     // http://localhost:8888/api/topics/cpu.server1.large/metrics/interval
 
-    // Aggregated cpu stats every min
-    // http://localhost:8888/api/topics/cpu.server1.large/metrics/interval?interval=60000
+    // Aggregated cpu stats every 43200 seconds (12 hours)
+    // http://localhost:8888/api/topics/cpu.server1.large/metrics/interval?interval=43200
 
     // Get all data points for cpu stats
     // http://localhost:8888/api/topics/cpu.server1.large/datapoints

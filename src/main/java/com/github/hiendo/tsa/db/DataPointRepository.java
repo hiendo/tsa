@@ -8,6 +8,8 @@ import com.datastax.driver.core.querybuilder.Select;
 import com.datastax.driver.core.utils.UUIDs;
 import com.github.hiendo.tsa.config.CassandraProperties;
 import com.github.hiendo.tsa.web.entities.DataPoint;
+import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

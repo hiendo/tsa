@@ -20,7 +20,7 @@ public class ChartOptions {
     private String yAxisLabel = "Default Y-Axis Label";
     @QueryParam("xAxisAsDate")
     @DefaultValue("true")
-    private boolean xAxisAsDate = false;
+    private boolean xAxisAsDate = true;
     @QueryParam("timeUnit")
     @DefaultValue("ms")
     private String timeUnit = "ms";
@@ -33,10 +33,10 @@ public class ChartOptions {
     @QueryParam("width")
     @DefaultValue("1000")
     private int width = 1000;
-    @QueryParam("startX")
-    private Long startX = null;
-    @QueryParam("endX")
-    private Long endX = null;
+    @QueryParam("start")
+    private Long start = null;
+    @QueryParam("end")
+    private Long end = null;
 
     public boolean isxAxisAsDate() {
         return xAxisAsDate;
@@ -66,12 +66,12 @@ public class ChartOptions {
         return width;
     }
 
-    public Long getEndX() {
-        return endX;
+    public Long getEnd() {
+        return end;
     }
 
-    public Long getStartX() {
-        return startX;
+    public Long getStart() {
+        return start;
     }
 
     public String getTimeUnit() {
