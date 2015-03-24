@@ -3,6 +3,7 @@ package com.github.hiendo.tsa.chart;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.BoxAndWhiskerRenderer;
 import org.jfree.data.statistics.BoxAndWhiskerCategoryDataset;
@@ -46,6 +47,8 @@ public class BasicBoxAndWhiskerChart {
         categoryPlot.setDomainGridlinePaint(Color.lightGray);
         categoryPlot.setRangeGridlinePaint(Color.lightGray);
         categoryPlot.setRenderer(boxAndWhiskerRenderer);
+        categoryPlot.getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+        categoryPlot.getDomainAxis().setMaximumCategoryLabelLines(2);
         return chart;
     }
 

@@ -4,6 +4,7 @@ import com.codahale.metrics.graphite.Graphite;
 import com.github.hiendo.tsa.servertests.tests.GraphiteImportedTestHelper;
 import org.testng.annotations.*;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,39 +62,18 @@ public class DataGeneratorTestUtil {
     }
 
     /**
-     http://localhost:8888/api/charts/xyline?topic=cpu.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
-     http://localhost:8888/api/charts/xyline?topic=cpu.server1&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&
+     http://localhost:8888/api/charts/xyline?topic=cpu.server1&topic=cpu.server2&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true
+     http://localhost:8888/api/charts/boxwhisker?topic=cpu.server1&topic=cpu.server2&interval=75&timeUnit=sec&title=CPU%20Usage&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20
      */
     @Test
     public void uploadFakeCpuData() throws Exception {
-        String topic = "cpu.server1";
-        Random random = new Random();
-
-        long now = TimeUnit.MILLISECONDS.toSeconds(new Date().getTime());
-        long incrementCount = TimeUnit.SECONDS.toSeconds(1);
-        long incrementingTime = now;
-
-        for ( int i = 0; i < 50; i++) {
-            double randomValue = 20 + random.nextInt(5) + random.nextDouble();
-            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
-            incrementingTime +=  incrementCount;
-        }
-
-        for ( int i = 0; i < 150; i++) {
-            double randomValue = 60 + random.nextInt(10) + random.nextDouble();
-            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
-            incrementingTime +=  incrementCount;
-        }
-
-        for ( int i = 0; i < 100; i++) {
-            double randomValue = 30 + random.nextInt(5) + random.nextDouble();
-            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
-            incrementingTime +=  incrementCount;
-        }
+        uploadFakeCpuDataForTopic("cpu.server1");
+        uploadFakeCpuDataForTopic("cpu.server2");
     }
 
     /**
-     http://localhost:8888/api/charts/xyline?topic=mem.server1&title=Memory%20for%20Server%201&xAxisLabel=Date&yAxisLabel=Memory%20(MB)&connectPoints=true     */
+     http://localhost:8888/api/charts/xyline?topic=mem.server1&title=Memory%20for%20Server%201&xAxisLabel=Date&yAxisLabel=Memory%20(MB)&connectPoints=true
+     */
     @Test
     public void uploadMemData() throws Exception {
         String topic = "mem.server1";
@@ -123,7 +103,7 @@ public class DataGeneratorTestUtil {
     }
 
     /**
-     http://localhost:8888/api/charts/xyline?topic=cpu.server1.large&title=CPU%20for%20Server%201&xAxisLabel=Date&yAxisLabel=CPU%20Load%20(%)&connectPoints=false
+     http://localhost:8888/api/charts/xyline?topic=cpu.server1&topic=cpu.server2&title=CPU%20for%20Server&xAxisLabel=Date&yAxisLabel=CPU%20Percentage%20Load&connectPoints=true&timeUnit=sec
      */
     @Test
     public void uploadLargeFakeCpuData() throws Exception {
@@ -173,6 +153,31 @@ public class DataGeneratorTestUtil {
         future3.get();
     }
 
+    private void uploadFakeCpuDataForTopic(String topic) throws IOException {
+        Random random = new Random();
+
+        long now = TimeUnit.MILLISECONDS.toSeconds(new Date().getTime());
+        long incrementCount = TimeUnit.SECONDS.toSeconds(1);
+        long incrementingTime = now;
+
+        for ( int i = 0; i < 50; i++) {
+            double randomValue = 20 + random.nextInt(5) + random.nextDouble();
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
+        }
+
+        for ( int i = 0; i < 150; i++) {
+            double randomValue = 60 + random.nextInt(10) + random.nextDouble();
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
+        }
+
+        for ( int i = 0; i < 100; i++) {
+            double randomValue = 30 + random.nextInt(5) + random.nextDouble();
+            graphite.send(topic, String.valueOf(randomValue), incrementingTime);
+            incrementingTime +=  incrementCount;
+        }
+    }
 
     // Aggregated cpu stats every hour (default interval)
     // http://localhost:8888/api/topics/cpu.server1.large/metrics/interval

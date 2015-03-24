@@ -88,23 +88,37 @@ public class TopicChartResource {
     public Response getBoxWhiskerMetricAggregatorInterval(@QueryParam(value = "topic") List<String> topics,
             @BeanParam final BoxAndWhisperMetricAggregationIntervalChartOption chartOptions) throws Exception {
 
-        DataPointsEntity dataPoints = dataPointRepository
-                .getDataPointsForTopic(topics.get(0), chartOptions.getStart(), chartOptions.getEnd());
-        final DataPointsSet dataPointsSet = timeIntervalDatapointsSplitter
-                .splitDatapoints(dataPoints, chartOptions.getStart(), chartOptions.getInterval());
-
         final DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
-        for (int dataPointsSetIndex = 0; dataPointsSetIndex < dataPointsSet.getSize(); dataPointsSetIndex++ ) {
-            DataPointsEntity dataPointsEntity = dataPointsSet.getDataPoints(dataPointsSetIndex);
-            List<Double> values = new ArrayList<Double>();
-            for(int dataPointIndex = 0; dataPointIndex < dataPointsEntity.size(); dataPointIndex++) {
-                values.add(dataPointsEntity.getValue(dataPointIndex));
+
+        for (String topic : topics) {
+            DataPointsEntity dataPoints = dataPointRepository
+                    .getDataPointsForTopic(topic, chartOptions.getStart(), chartOptions.getEnd());
+            final DataPointsSet dataPointsSet = timeIntervalDatapointsSplitter
+                    .splitDatapoints(dataPoints, chartOptions.getStart(), chartOptions.getInterval());
+
+            for (int dataPointsSetIndex = 0; dataPointsSetIndex < dataPointsSet.getSize(); dataPointsSetIndex++) {
+                DataPointsEntity dataPointsEntity = dataPointsSet.getDataPoints(dataPointsSetIndex);
+                List<Double> values = new ArrayList<Double>();
+                for (int dataPointIndex = 0; dataPointIndex < dataPointsEntity.size(); dataPointIndex++) {
+                    values.add(dataPointsEntity.getValue(dataPointIndex));
+                }
+
+                // case where time unit is sec so we need to convert min/max time axis to ms
+                Long startDate = dataPointsEntity.getFirstTimestamp();
+                if (chartOptions.getTimeUnit().equals("sec")) {
+                    startDate = startDate * 1000;
+                }
+
+                Long endDate = dataPointsEntity.getLastTimestamp();
+                if (chartOptions.getTimeUnit().equals("sec")) {
+                    endDate = endDate * 1000;
+                }
+
+                String dateRange = chartOptions.getDateFormat().format(new Date(startDate))
+                        + "\n" + chartOptions.getDateFormat().format(new Date(endDate));
+
+                dataset.add(values, topic, dateRange);
             }
-
-            String dateRange = chartOptions.getDateFormat().format(new Date((long) dataPointsEntity.getFirstTimestamp()))
-            +" to " + chartOptions.getDateFormat().format(new Date((long) dataPointsEntity.getLastTimestamp()));
-
-            dataset.add(values, dateRange, dateRange);
         }
 
         StreamingOutput stream = new StreamingOutput() {
