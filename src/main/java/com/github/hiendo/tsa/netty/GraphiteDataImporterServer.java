@@ -52,7 +52,7 @@ public class GraphiteDataImporterServer {
                     @Override
                     public void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline().addLast("lineDelimiterDecoder",
-                                new DelimiterBasedFrameDecoder(80, Delimiters.lineDelimiter()));
+                                new DelimiterBasedFrameDecoder(160, Delimiters.lineDelimiter()));
                         ch.pipeline().addLast("stringDecoder", new StringDecoder(CharsetUtil.UTF_8));
                         ch.pipeline().addLast("graphiteDataProcessor", graphiteDataHandler);
                     }
