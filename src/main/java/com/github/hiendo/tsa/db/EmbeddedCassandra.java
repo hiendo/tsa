@@ -5,6 +5,7 @@ import com.github.hiendo.tsa.config.CassandraProperties;
 import org.apache.cassandra.service.CassandraDaemon;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +22,6 @@ public class EmbeddedCassandra {
     }
 
     public synchronized void start() throws IOException {
-        System.setProperty("os.name", "unix"); // bug: https://issues.apache.org/jira/browse/CASSANDRA-8452
         File cassandraHome = new File(cassandraProperties.getCassandraHome());
         if (cassandraProperties.isDeleteCassandraHome() && cassandraHome.exists() && !FileUtils.deleteQuietly(cassandraHome)) {
             throw new RuntimeException("Unable to delete cassandra home " + cassandraProperties.getCassandraHome());

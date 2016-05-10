@@ -72,7 +72,7 @@ request_scheduler: org.apache.cassandra.scheduler.NoScheduler
 
 index_interval: 128
 
-encryption_options:
+server_encryption_options:
     internode_encryption: none
     keystore: conf/.keystore
     keystore_password: cassandra
